@@ -136,7 +136,9 @@ class Uploader:
             for file_ in __files:
                 file_path = os.path.join(__path, file_)
                 if self.exclude_path:
-                    file_path = file_path.replace(self.exclude_path, "")
+                    relative_path = file_path.replace(self.exclude_path, "")
+                else:
+                    relative_path = file_path
                 # Lists in python are ordered, so s3 prefix will get loaded first when provided
                 url_parts = []
                 if self.s3_prefix:
@@ -144,7 +146,7 @@ class Uploader:
                         self.s3_prefix.split(os.sep) if os.sep in self.s3_prefix else self.s3_prefix.split("/")
                     )
                 # Add rest of the file path to parts before normalizing as an S3 object URL
-                url_parts.extend(file_path.split(os.sep))
+                url_parts.extend(relative_path.split(os.sep))
                 # Remove falsy values using filter - "None", "bool", "len" or "lambda item: item"
                 object_path = urljoin(*filter(None, url_parts))
                 files_to_upload[object_path] = file_path
