@@ -3,5 +3,6 @@ temp.py
 
 dist/
 venv/
+build/
 .idea/
 PyS3Uploader.egg-info/
