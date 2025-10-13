@@ -14,6 +14,7 @@ from s3.logger import default_logger
 from s3.utils import (
     RETRY_CONFIG,
     UploadResults,
+    convert_seconds,
     convert_to_folder_structure,
     getenv,
     urljoin,
@@ -134,7 +135,7 @@ class Uploader:
         self.logger.info(
             "Total number of uploads: %d, success: %d, failed: %d", total, self.results.success, self.results.failed
         )
-        self.logger.info("Run Time: %.2fs", time.time() - self.start)
+        self.logger.info("Run time: %s", convert_seconds(time.time() - self.start))
 
     def _proceed_to_upload(self, filepath: str, objectpath: str) -> bool:
         """Compares file size if the object already exists in S3.
