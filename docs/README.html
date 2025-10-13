@@ -110,6 +110,8 @@
 <ul class="simple">
 <li><p><strong>s3_prefix</strong> - S3 object prefix for each file. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>exclude_path</strong> - Path in <code class="docutils literal notranslate"><span class="pre">upload_dir</span></code> that has to be excluded in object keys. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>skip_dot_files</strong> - Boolean flag to skip dot files. Defaults to <code class="docutils literal notranslate"><span class="pre">True</span></code></p></li>
+<li><p><strong>overwrite</strong> - Boolean flag to overwrite files present in S3. Defaults to <code class="docutils literal notranslate"><span class="pre">False</span></code></p></li>
 <li><p><strong>logger</strong> - Bring your own custom pre-configured logger. Defaults to on-screen logging.
 <br><br></p></li>
 <li><p><strong>region_name</strong> - AWS region name. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">AWS_DEFAULT_REGION</span></code></p></li>

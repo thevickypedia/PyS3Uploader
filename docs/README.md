@@ -67,6 +67,8 @@ if __name__ == '__main__':
 #### Optional kwargs
 - **s3_prefix** - S3 object prefix for each file. Defaults to ``None``
 - **exclude_path** - Path in ``upload_dir`` that has to be excluded in object keys. Defaults to `None`
+- **skip_dot_files** - Boolean flag to skip dot files. Defaults to ``True``
+- **overwrite** - Boolean flag to overwrite files present in S3. Defaults to ``False``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
 <br><br>
 - **region_name** - AWS region name. Defaults to the env var `AWS_DEFAULT_REGION`
