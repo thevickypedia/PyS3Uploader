@@ -1,4 +1,5 @@
 import os
+from typing import Set, Dict
 
 
 class UploadResults(dict):
@@ -28,3 +29,42 @@ def urljoin(*args) -> str:
         Joined url.
     """
     return "/".join(map(lambda x: str(x).rstrip("/").lstrip("/"), args))
+
+
+def convert_to_folder_structure(sequence: Set[str]) -> str:
+    """Convert objects in a s3 buckets into a folder like representation.
+
+    Args:
+        sequence: Takes either a mutable or immutable sequence as an argument.
+
+    Returns:
+        str:
+        String representation of the architecture.
+    """
+    folder_structure = {}
+    for item in sequence:
+        parts = item.split('/')
+        current_level = folder_structure
+        for part in parts:
+            current_level = current_level.setdefault(part, {})
+
+    def generate_folder_structure(structure: Dict[str, dict], indent: str = '') -> str:
+        """Generates the folder like structure.
+
+        Args:
+            structure: Structure of folder objects as key-value pairs.
+            indent: Required indentation for the ASCII.
+        """
+        result = ''
+        for i, (key, value) in enumerate(structure.items()):
+            if i == len(structure) - 1:
+                result += indent + '└── ' + key + '\n'
+                sub_indent = indent + '    '
+            else:
+                result += indent + '├── ' + key + '\n'
+                sub_indent = indent + '│   '
+            if value:
+                result += generate_folder_structure(value, sub_indent)
+        return result
+
+    return generate_folder_structure(folder_structure)

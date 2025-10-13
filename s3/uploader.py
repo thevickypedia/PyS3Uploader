@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
 from s3.logger import default_logger
-from s3.utils import UploadResults, getenv, urljoin
+from s3.utils import UploadResults, getenv, urljoin, convert_to_folder_structure
 
 
 class Uploader:
@@ -200,3 +200,18 @@ class Uploader:
                     self.logger.error(f"Upload failed: {error}")
                     self.results.failed += 1
         self.exit()
+
+    def get_bucket_structure(self) -> str:
+        """Gets all the objects in an S3 bucket and forms it into a hierarchical folder like representation.
+
+        Returns:
+            str:
+            Returns a hierarchical folder like representation of the chosen bucket.
+        """
+        self.init()
+        # Using list and set will yield the same results but using set we can isolate directories from files
+        return convert_to_folder_structure(set([obj.key for obj in self.bucket.objects.all()]))
+
+    def print_bucket_structure(self) -> None:
+        """Prints all the objects in an S3 bucket with a folder like representation."""
+        print(self.get_bucket_structure())
