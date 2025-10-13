@@ -12,6 +12,7 @@ jobs:
   pypi-publisher:
     runs-on: thevickypedia-default
     steps:
+      - uses: actions/checkout@v5
       - uses: thevickypedia/pypi-publisher@v3
         env:
           token: ${{ secrets.PYPI_TOKEN }}
