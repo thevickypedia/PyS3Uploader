@@ -16,7 +16,8 @@ jobs:
       - uses: thevickypedia/pypi-publisher@v3
         env:
           token: ${{ secrets.PYPI_TOKEN }}
-  project_version:
+
+  set-version:
     runs-on: thevickypedia-default
     outputs:
       project_version: ${{ steps.set-version.outputs.project_version }}
@@ -28,10 +29,22 @@ jobs:
           echo "Resolving project version..."
           echo "project_version=$(python -c 'import importlib.metadata; print(importlib.metadata.version("PyS3Uploader"))')" >> $GITHUB_OUTPUT
         shell: bash
+
   release:
     needs:
-      - project_version
+      - set-version
       - pypi-publisher
     uses: ./.github/workflows/release.yml
     with:
-      project_version: ${{ needs.project_version.outputs.project_version }}
+      project_version: ${{ needs.set-version.outputs.project_version }}
+    secrets: inherit
+
+  release-notes:
+    needs:
+      - set-version
+      - release
+    if: ${{ needs.release.outputs.release_exists == 'false' }}
+    uses: ./.github/workflows/notes.yml
+    with:
+      project_version: ${{ needs.set-version.outputs.project_version }}
+    secrets: inherit

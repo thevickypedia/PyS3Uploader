@@ -19,11 +19,6 @@ clean_docs() {
   done
 }
 
-update_release_notes() {
-  # Update release notes
-  gitverse-release reverse -f release_notes.rst -t 'Release Notes'
-}
-
 gen_docs() {
   # Generate sphinx docs
   mkdir -p docs_gen/_static  # Create a _static directory if unavailable
@@ -35,7 +30,6 @@ gen_docs() {
 
 gen_docs &
 clean_docs &
-update_release_notes &
 
 wait
 
