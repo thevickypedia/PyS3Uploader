@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+v0.2.1 (10/13/2025)
+-------------------
+- [299f0f1](https://github.com/thevickypedia/PyS3Uploader/commit/299f0f14d410434fc11819906ed93d788da8b888) chore: Release ``v0.2.1``
+- [b409880](https://github.com/thevickypedia/PyS3Uploader/commit/b409880ebb6fd9962461702653d2e94284e550c5) docs: Update runbook
+- [31931bf](https://github.com/thevickypedia/PyS3Uploader/commit/31931bf836fbe006b36a677f9538096b1ed9b5b7) feat: Add a new feature to skip dot files
+- [412cb92](https://github.com/thevickypedia/PyS3Uploader/commit/412cb92f024500c0a812f41d14ccbf00943d7cd7) docs: Update runbook
+- [abc463e](https://github.com/thevickypedia/PyS3Uploader/commit/abc463ed84fd253d506e39a5991d2e237510f5fd) feat: Support custom retry config for ``boto3``
+- [b4dce6d](https://github.com/thevickypedia/PyS3Uploader/commit/b4dce6d1103513fc882052964d66ecb98d3c95ac) chore: Update ``.gitignore``
+- [0053d97](https://github.com/thevickypedia/PyS3Uploader/commit/0053d97568d5f90847a913d5079d798b5d0795ea) build: Move requirements to a dedicated file
+- [bdab97c](https://github.com/thevickypedia/PyS3Uploader/commit/bdab97cfab3734b80a1f485c981b9cfcc2381209) chore: Update release notes for v0.2.0
+
 v0.2.0 (10/13/2025)
 -------------------
 - [e92500c](https://github.com/thevickypedia/PyS3Uploader/commit/e92500cf9bc6f0d8fda3670a8daaba4e6da0be1c) chore: Release ``v0.2.0``
