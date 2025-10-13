@@ -5,5 +5,8 @@ dist/
 venv/
 build/
 .idea/
-PyS3Uploader.egg-info/
 _build/
+.vscode/
+.DS_Store
+__pycache__/
+PyS3Uploader.egg-info/
