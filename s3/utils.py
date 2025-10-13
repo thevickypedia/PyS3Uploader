@@ -43,3 +43,13 @@ def get_object_path(filepath: str, start_folder_name: str):
     relative_parts = parts[start_index:]
     # Join with os.sep for system-appropriate separators
     return os.sep.join(relative_parts)
+
+
+def urljoin(*args) -> str:
+    """Joins given arguments into a url. Trailing but not leading slashes are stripped for each argument.
+
+    Returns:
+        str:
+        Joined url.
+    """
+    return "/".join(map(lambda x: str(x).rstrip("/").lstrip("/"), args))

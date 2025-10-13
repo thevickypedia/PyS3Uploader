@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
 from s3.logger import default_logger
-from s3.utils import UploadResults, get_object_path, getenv
+from s3.utils import UploadResults, get_object_path, getenv, urljoin
 
 
 class Uploader:
@@ -27,7 +27,8 @@ class Uploader:
         self,
         bucket_name: str,
         upload_dir: str,
-        prefix_dir: str = None,
+        s3_prefix: str = None,
+        start_folder: str = None,
         region_name: str = None,
         profile_name: str = None,
         aws_access_key_id: str = None,
@@ -39,7 +40,8 @@ class Uploader:
         Args:
             bucket_name: Name of the bucket.
             upload_dir: Name of the directory to be uploaded.
-            prefix_dir: Start folder name from upload_dir.
+            s3_prefix: Particular bucket prefix within which the upload should happen.
+            start_folder: Start folder name from upload_dir.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
@@ -55,7 +57,8 @@ class Uploader:
         self.s3 = self.session.resource(service_name="s3", config=self.RETRY_CONFIG)
         self.logger = logger or default_logger()
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "SOURCE")
-        self.prefix_dir = prefix_dir
+        self.s3_prefix = s3_prefix
+        self.start_folder = start_folder
         self.bucket_name = bucket_name
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = None
@@ -70,9 +73,9 @@ class Uploader:
             BucketNotFound: If bucket name was not found.
         """
         self.start = time.time()
-        if self.prefix_dir and self.prefix_dir not in self.upload_dir.split(os.sep):
+        if self.start_folder and self.start_folder not in self.upload_dir.split(os.sep):
             raise ValueError(
-                f"\n\n\tPrefix folder name {self.prefix_dir!r} is not a part of upload directory {self.upload_dir!r}"
+                f"\n\n\tStart folder {self.start_folder!r} is not a part of upload directory {self.upload_dir!r}"
             )
         if not self.upload_dir:
             raise ValueError("\n\n\tCannot proceed without an upload directory.")
@@ -119,14 +122,23 @@ class Uploader:
         for __path, __directory, __files in os.walk(self.upload_dir):
             for file_ in __files:
                 file_path = os.path.join(__path, file_)
-                if self.prefix_dir:
+                if self.start_folder:
                     try:
-                        object_path = get_object_path(file_path, self.prefix_dir)
+                        relative_path = get_object_path(file_path, self.start_folder)
                     except ValueError as error:
                         self.logger.error(error)
                         continue
                 else:
-                    object_path = self.prefix_dir
+                    relative_path = self.start_folder
+                # Lists in python are ordered, so s3 prefix will get loaded first when provided
+                url_parts = []
+                if self.s3_prefix:
+                    url_parts.extend(
+                        self.s3_prefix.split(os.sep) if os.sep in self.s3_prefix else self.s3_prefix.split("/")
+                    )
+                # Add rest of the file path to parts before normalizing as an S3 object URL
+                url_parts.extend(relative_path.split(os.sep))
+                object_path = urljoin(*url_parts)
                 files_to_upload[object_path] = file_path
         return files_to_upload
 
@@ -156,6 +168,7 @@ class Uploader:
         self.init()
         self.logger.info(f"Number of threads: {max_workers}")
         keys = self._get_files()
+        self.logger.debug(keys)
         self.logger.info("Initiating upload process.")
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [executor.submit(self._uploader, *kv) for kv in keys.items()]
