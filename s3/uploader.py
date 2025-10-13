@@ -29,6 +29,7 @@ class Uploader:
         upload_dir: str,
         s3_prefix: str = None,
         exclude_path: str = None,
+        overwrite: bool = False,
         region_name: str = None,
         profile_name: str = None,
         aws_access_key_id: str = None,
@@ -42,6 +43,7 @@ class Uploader:
             upload_dir: Full path of the directory to be uploaded.
             s3_prefix: Particular bucket prefix within which the upload should happen.
             exclude_path: Full directory path to exclude from S3 object prefix.
+            overwrite: Boolean flag to overwrite files in S3.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
@@ -69,15 +71,23 @@ class Uploader:
             aws_secret_access_key=aws_secret_access_key or getenv("AWS_SECRET_ACCESS_KEY"),
         )
         self.s3 = self.session.resource(service_name="s3", config=self.RETRY_CONFIG)
+
         self.logger = logger or default_logger()
+
+        self.bucket_name = bucket_name
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
         self.s3_prefix = s3_prefix
         self.exclude_path = exclude_path
-        self.bucket_name = bucket_name
-        # noinspection PyUnresolvedReferences
-        self.bucket: boto3.resources.factory.s3.Bucket = None
+        self.overwrite = overwrite
+
         self.results = UploadResults()
         self.start = time.time()
+
+        # noinspection PyUnresolvedReferences
+        self.bucket: boto3.resources.factory.s3.Bucket = None
+        # noinspection PyUnresolvedReferences
+        self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = []
+        self.object_size_map: Dict[str, int] = {}
 
     def init(self) -> None:
         """Instantiates the bucket instance.
@@ -106,6 +116,9 @@ class Uploader:
         self.upload_dir = os.path.abspath(self.upload_dir)
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = self.s3.Bucket(self.bucket_name)
+        # noinspection PyUnresolvedReferences
+        self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = [obj for obj in self.bucket.objects.all()]
+        self.object_size_map = {obj.key: obj.size for obj in self.bucket_objects}
 
     def exit(self) -> None:
         """Exits after printing results, and run time."""
@@ -122,6 +135,17 @@ class Uploader:
             objectpath: Object path ref in S3.
             filepath: Filepath to upload.
         """
+        if not self.overwrite:
+            # Indicates that the object path already exists in S3
+            if object_size := self.object_size_map.get(objectpath):
+                file_size = os.path.getsize(filepath)
+                if object_size == file_size:
+                    self.logger.info("File %s exists, and size matches, skipping..", objectpath)
+                    return
+                else:
+                    self.logger.info(
+                        "File %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
+                    )
         self.bucket.upload_file(filepath, objectpath)
 
     def _get_files(self) -> Dict[str, str]:
@@ -212,7 +236,7 @@ class Uploader:
         """
         self.init()
         # Using list and set will yield the same results but using set we can isolate directories from files
-        return convert_to_folder_structure(set([obj.key for obj in self.bucket.objects.all()]))
+        return convert_to_folder_structure(set(obj.key for obj in self.bucket_objects))
 
     def print_bucket_structure(self) -> None:
         """Prints all the objects in an S3 bucket with a folder like representation."""
