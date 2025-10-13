@@ -2,6 +2,7 @@ import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from typing import Dict
 
 import boto3.resources.factory
 from botocore.config import Config
@@ -13,7 +14,6 @@ from s3.logger import default_logger
 from s3.utils import UploadResults, get_object_path, getenv
 
 
-# noinspection PyUnresolvedReference
 class Uploader:
     """Initiates Uploader object to upload entire directory to S3.
 
@@ -57,6 +57,7 @@ class Uploader:
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "SOURCE")
         self.prefix_dir = prefix_dir
         self.bucket_name = bucket_name
+        # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = None
         self.results = UploadResults()
         self.start = time.time()
@@ -87,6 +88,7 @@ class Uploader:
             raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found in {_alias} account.\n\tAvailable: {buckets}")
         self.upload_dir = os.path.abspath(self.upload_dir)
         self.logger.info("Bucket objects from '%s' will be uploaded to '%s'", self.upload_dir, self.bucket_name)
+        # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = self.s3.Bucket(self.bucket_name)
 
     def exit(self) -> None:
@@ -106,7 +108,13 @@ class Uploader:
         """
         self.bucket.upload_file(filepath, objectpath)
 
-    def _get_files(self):
+    def _get_files(self) -> Dict[str, str]:
+        """Get a mapping for all the file path and object paths in upload directory.
+
+        Returns:
+            Dict[str, str]:
+            Returns a dictionary object path and filepath.
+        """
         files_to_upload = {}
         for __path, __directory, __files in os.walk(self.upload_dir):
             for file_ in __files:

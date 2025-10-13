@@ -27,8 +27,8 @@ def default_format() -> logging.Formatter:
         Returns an instance of the ``Formatter`` object.
     """
     return logging.Formatter(
-        fmt='%(asctime)s - %(levelname)s - [%(module)s:%(lineno)d] - %(funcName)s - %(message)s',
-        datefmt='%b-%d-%Y %I:%M:%S %p'
+        fmt="%(asctime)s - %(levelname)s - [%(module)s:%(lineno)d] - %(funcName)s - %(message)s",
+        datefmt="%b-%d-%Y %I:%M:%S %p",
     )
 
 
