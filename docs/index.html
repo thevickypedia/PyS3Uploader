@@ -133,14 +133,34 @@ However, this behavior can be avoided by specifying the <code class="docutils li
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="s3.uploader.Uploader._proceed_to_upload">
+<span class="sig-name descname"><span class="pre">_proceed_to_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#s3.uploader.Uploader._proceed_to_upload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Compares file size if the object already exists in S3.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>filepath</strong> – Source filepath.</p></li>
+<li><p><strong>objectpath</strong> – S3 object path.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns a boolean flag to indicate upload flag.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>bool</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="s3.uploader.Uploader._uploader">
-<span class="sig-name descname"><span class="pre">_uploader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#s3.uploader.Uploader._uploader" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_uploader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#s3.uploader.Uploader._uploader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uploads the filepath to the specified S3 bucket.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>objectpath</strong> – Object path ref in S3.</p></li>
 <li><p><strong>filepath</strong> – Filepath to upload.</p></li>
+<li><p><strong>objectpath</strong> – Object path ref in S3.</p></li>
 </ul>
 </dd>
 </dl>
@@ -152,7 +172,7 @@ However, this behavior can be avoided by specifying the <code class="docutils li
 <dd><p>Get a mapping for all the file path and object paths in upload directory.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns a dictionary object path and filepath.</p>
+<dd class="field-odd"><p>Returns a key-value pair of filepath and objectpath.</p>
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dict[str, str]</p>

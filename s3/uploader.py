@@ -128,32 +128,50 @@ class Uploader:
         )
         self.logger.info("Run Time: %.2fs", time.time() - self.start)
 
-    def _uploader(self, objectpath: str, filepath: str) -> None:
+    def _proceed_to_upload(self, filepath: str, objectpath: str) -> bool:
+        """Compares file size if the object already exists in S3.
+
+        Args:
+            filepath: Source filepath.
+            objectpath: S3 object path.
+
+        Returns:
+            bool:
+            Returns a boolean flag to indicate upload flag.
+        """
+        if self.overwrite:
+            return True
+        # Indicates that the object path already exists in S3
+        if object_size := self.object_size_map.get(objectpath):
+            try:
+                file_size = os.path.getsize(filepath)
+            except (OSError, PermissionError) as error:
+                self.logger.error(error)
+                return True
+            if object_size == file_size:
+                self.logger.info("S3 object %s exists, and size [%d] matches, skipping..", objectpath, object_size)
+                return False
+            self.logger.info(
+                "S3 object %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
+            )
+        return True
+
+    def _uploader(self, filepath: str, objectpath: str) -> None:
         """Uploads the filepath to the specified S3 bucket.
 
         Args:
-            objectpath: Object path ref in S3.
             filepath: Filepath to upload.
+            objectpath: Object path ref in S3.
         """
-        if not self.overwrite:
-            # Indicates that the object path already exists in S3
-            if object_size := self.object_size_map.get(objectpath):
-                file_size = os.path.getsize(filepath)
-                if object_size == file_size:
-                    self.logger.info("File %s exists, and size matches, skipping..", objectpath)
-                    return
-                else:
-                    self.logger.info(
-                        "File %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
-                    )
-        self.bucket.upload_file(filepath, objectpath)
+        if self._proceed_to_upload(filepath, objectpath):
+            self.bucket.upload_file(filepath, objectpath)
 
     def _get_files(self) -> Dict[str, str]:
         """Get a mapping for all the file path and object paths in upload directory.
 
         Returns:
             Dict[str, str]:
-            Returns a dictionary object path and filepath.
+            Returns a key-value pair of filepath and objectpath.
         """
         files_to_upload = {}
         for __path, __directory, __files in os.walk(self.upload_dir):
@@ -173,7 +191,7 @@ class Uploader:
                 url_parts.extend(relative_path.split(os.sep))
                 # Remove falsy values using filter - "None", "bool", "len" or "lambda item: item"
                 object_path = urljoin(*filter(None, url_parts))
-                files_to_upload[object_path] = file_path
+                files_to_upload[file_path] = object_path
         return files_to_upload
 
     def run(self) -> None:
@@ -187,7 +205,7 @@ class Uploader:
             keys.items(), total=len(keys), unit="file", leave=True, desc=f"Uploading files from {self.upload_dir}"
         ):
             try:
-                self._uploader(objectpath=objectpath, filepath=filepath)
+                self._uploader(filepath=filepath, objectpath=objectpath)
                 self.results.success += 1
             except ClientError as error:
                 self.logger.error(error)
@@ -211,7 +229,10 @@ class Uploader:
             max_workers,
         )
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = [executor.submit(self._uploader, *kv) for kv in keys.items()]
+            futures = [
+                executor.submit(self._uploader, **dict(filepath=filepath, objectpath=objectpath))
+                for filepath, objectpath in keys.items()
+            ]
             for future in tqdm(
                 iterable=as_completed(futures),
                 total=len(futures),
