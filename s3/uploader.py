@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Dict
+from typing import Dict, Iterable
 
 import boto3.resources.factory
 from botocore.config import Config
@@ -36,6 +36,8 @@ class Uploader:
         exclude_prefix: str = None,
         skip_dot_files: bool = True,
         overwrite: bool = False,
+        file_exclusion: Iterable[str] = None,
+        folder_exclusion: Iterable[str] = None,
         region_name: str = None,
         profile_name: str = None,
         aws_access_key_id: str = None,
@@ -52,6 +54,8 @@ class Uploader:
             exclude_prefix: Full directory path to exclude from S3 object prefix.
             skip_dot_files: Boolean flag to skip dot files.
             overwrite: Boolean flag to overwrite files in S3.
+            file_exclusion: Sequence of files to exclude during upload.
+            folder_exclusion: Sequence of directories to exclude during upload.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
@@ -88,6 +92,8 @@ class Uploader:
         self.exclude_prefix = exclude_prefix
         self.skip_dot_files = skip_dot_files
         self.overwrite = overwrite
+        self.file_exclusion = file_exclusion or []
+        self.folder_exclusion = folder_exclusion or []
 
         self.results = UploadResults()
         self.start = time.time()
@@ -184,7 +190,14 @@ class Uploader:
         """
         files_to_upload = {}
         for __path, __directory, __files in os.walk(self.upload_dir):
+            scan_dir = os.path.split(__path)[-1]
+            if scan_dir in self.folder_exclusion:
+                self.logger.info("Skipping '%s' honoring folder exclusion", scan_dir)
+                continue
             for file_ in __files:
+                if file_ in self.file_exclusion:
+                    self.logger.info("Skipping '%s' honoring file exclusion", file_)
+                    continue
                 if self.skip_dot_files and file_.startswith("."):
                     self.logger.info("Skipping dot file: %s", file_)
                     continue
