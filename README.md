@@ -1,2 +1,2 @@
-# s3-uploader
+# PyS3Uploader
 Upload objects to S3
