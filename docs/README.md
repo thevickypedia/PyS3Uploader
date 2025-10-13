@@ -42,7 +42,7 @@ if __name__ == '__main__':
     wrapper = s3.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
-        exclude_path="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
+        exclude_prefix="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
     )
     wrapper.run_in_parallel()
 ```
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     wrapper = s3.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
-        exclude_path="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
+        exclude_prefix="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
     )
     wrapper.run()
 ```
@@ -66,7 +66,7 @@ if __name__ == '__main__':
 
 #### Optional kwargs
 - **s3_prefix** - S3 object prefix for each file. Defaults to ``None``
-- **exclude_path** - Path in ``upload_dir`` that has to be excluded in object keys. Defaults to `None`
+- **exclude_prefix** - Path in ``upload_dir`` that has to be excluded in object keys. Defaults to `None`
 - **skip_dot_files** - Boolean flag to skip dot files. Defaults to ``True``
 - **overwrite** - Boolean flag to overwrite files present in S3. Defaults to ``False``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.

@@ -33,7 +33,7 @@ class Uploader:
         bucket_name: str,
         upload_dir: str,
         s3_prefix: str = None,
-        exclude_path: str = None,
+        exclude_prefix: str = None,
         skip_dot_files: bool = True,
         overwrite: bool = False,
         region_name: str = None,
@@ -49,7 +49,7 @@ class Uploader:
             bucket_name: Name of the bucket.
             upload_dir: Full path of the directory to be uploaded.
             s3_prefix: Particular bucket prefix within which the upload should happen.
-            exclude_path: Full directory path to exclude from S3 object prefix.
+            exclude_prefix: Full directory path to exclude from S3 object prefix.
             skip_dot_files: Boolean flag to skip dot files.
             overwrite: Boolean flag to overwrite files in S3.
             region_name: Name of the AWS region.
@@ -65,11 +65,11 @@ class Uploader:
                 If ``s3_prefix`` is set to: ``2025``, then the file path
                 ``/home/ubuntu/Desktop/S3Upload/sub/photo.jpg`` will be uploaded as ``2025/S3Upload/sub/photo.jpg``
 
-            exclude_path:
+            exclude_prefix:
                 When upload directory is "/home/ubuntu/Desktop/S3Upload", each file will naturally have the full prefix.
-                However, this behavior can be avoided by specifying the ``exclude_path`` parameter.
+                However, this behavior can be avoided by specifying the ``exclude_prefix`` parameter.
 
-                If exclude_path is set to: ``/home/ubuntu/Desktop``, then the file path
+                If exclude_prefix is set to: ``/home/ubuntu/Desktop``, then the file path
                 ``/home/ubuntu/Desktop/S3Upload/sub-dir/photo.jpg`` will be uploaded as ``S3Upload/sub-dir/photo.jpg``
         """
         self.session = boto3.Session(
@@ -85,7 +85,7 @@ class Uploader:
         self.bucket_name = bucket_name
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
         self.s3_prefix = s3_prefix
-        self.exclude_path = exclude_path
+        self.exclude_prefix = exclude_prefix
         self.skip_dot_files = skip_dot_files
         self.overwrite = overwrite
 
@@ -106,9 +106,9 @@ class Uploader:
             BucketNotFound: If bucket name was not found.
         """
         self.start = time.time()
-        if self.exclude_path and self.exclude_path not in self.upload_dir:
+        if self.exclude_prefix and self.exclude_prefix not in self.upload_dir:
             raise ValueError(
-                f"\n\n\tStart folder {self.exclude_path!r} is not a part of upload directory {self.upload_dir!r}"
+                f"\n\n\tStart folder {self.exclude_prefix!r} is not a part of upload directory {self.upload_dir!r}"
             )
         if not self.upload_dir:
             raise ValueError("\n\n\tCannot proceed without an upload directory.")
@@ -189,8 +189,8 @@ class Uploader:
                     self.logger.info("Skipping dot file: %s", file_)
                     continue
                 file_path = os.path.join(__path, file_)
-                if self.exclude_path:
-                    relative_path = file_path.replace(self.exclude_path, "")
+                if self.exclude_prefix:
+                    relative_path = file_path.replace(self.exclude_prefix, "")
                 else:
                     relative_path = file_path
                 # Lists in python are ordered, so s3 prefix will get loaded first when provided
