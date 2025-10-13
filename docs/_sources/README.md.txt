@@ -19,12 +19,10 @@
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/thevickypedia/PyS3Uploader)][repo]
 [![GitHub last commit](https://img.shields.io/github/last-commit/thevickypedia/PyS3Uploader)][repo]
 
-[//]: # (**Build Status**)
+**Build Status**
 
-[//]: # ()
-[//]: # ([![pypi-publish][gha-pypi-badge]][gha-pypi])
-
-[//]: # ([![pages-build-deployment][gha-pages-badge]][gha-pages])
+[![pypi-publish][gha-pypi-badge]][gha-pypi]
+[![pages-build-deployment][gha-pages-badge]][gha-pages]
 
 # PyS3Uploader
 Python module to upload an entire directory to an S3 bucket.
@@ -107,10 +105,15 @@ pip install sphinx==5.1.1 pre-commit recommonmark
 pre-commit run --all-files
 ```
 
-### Pypi Package
-[![pypi-module][pypi-logo]][pypi-tutorials]
+## Pypi Package
+[![pypi-module][label-pypi-package]][pypi-repo]
 
 [https://pypi.org/project/PyS3Uploader/][pypi]
+
+## Runbook
+[![made-with-sphinx-doc][label-sphinx-doc]][sphinx]
+
+[https://thevickypedia.github.io/PyS3Uploader/][runbook]
 
 ## License & copyright
 
@@ -128,3 +131,8 @@ Licensed under the [MIT License][license]
 [gha-pypi-badge]: https://github.com/thevickypedia/PyS3Uploader/actions/workflows/python-publish.yml/badge.svg
 [gha-pages]: https://github.com/thevickypedia/PyS3Uploader/actions/workflows/pages/pages-build-deployment
 [gha-pypi]: https://github.com/thevickypedia/PyS3Uploader/actions/workflows/python-publish.yml
+[sphinx]: https://www.sphinx-doc.org/en/master/man/sphinx-autogen.html
+[label-sphinx-doc]: https://img.shields.io/badge/Made%20with-Sphinx-blue?style=for-the-badge&logo=Sphinx
+[runbook]: https://thevickypedia.github.io/PyS3Uploader/
+[label-pypi-package]: https://img.shields.io/badge/Pypi%20Package-PyS3Uploader-blue?style=for-the-badge&logo=Python
+[pypi-repo]: https://packaging.python.org/tutorials/packaging-projects/

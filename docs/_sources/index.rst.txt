@@ -10,7 +10,7 @@ Welcome to PyS3Uploader's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-    README
+   README
 
 PyS3Uploader
 ============
