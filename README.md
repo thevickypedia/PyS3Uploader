@@ -42,7 +42,7 @@ if __name__ == '__main__':
     wrapper = s3.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
-        prefix_dir="START_DIRECTORY_IN_S3"
+        exclude_path="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
     )
     wrapper.run_in_parallel()
 ```
@@ -55,7 +55,7 @@ if __name__ == '__main__':
     wrapper = s3.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
-        prefix_dir="START_DIRECTORY_IN_S3"
+        exclude_path="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
     )
     wrapper.run()
 ```
@@ -65,7 +65,8 @@ if __name__ == '__main__':
 - **upload_dir** - Directory to upload.
 
 #### Optional kwargs
-- **prefix_dir** - Start directory from ``upload_dir`` to use as root in S3. Defaults to `None`
+- **s3_prefix** - S3 object prefix for each file. Defaults to ``None``
+- **exclude_path** - Path in ``upload_dir`` that has to be excluded in object keys. Defaults to `None`
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
 <br><br>
 - **region_name** - AWS region name. Defaults to the env var `AWS_DEFAULT_REGION`

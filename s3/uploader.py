@@ -51,7 +51,16 @@ class Uploader:
         See Also:
             exclude_path:
                 When upload directory is "/home/ubuntu/Desktop/S3Upload", each file will naturally have the full prefix.
-                This can be avoided by specifying exclude_path parameter
+                However, this behavior can be avoided by specifying the ``exclude_path`` parameter.
+
+                If exclude_path is set to: ``/home/ubuntu/Desktop``, then the file path
+                ``/home/ubuntu/Desktop/S3Upload/sub-dir/photo.jpg`` will be uploaded as ``S3Upload/sub-dir/photo.jpg``
+
+            s3_prefix:
+                If provided, ``s3_prefix`` will always be attached to each object.
+
+                If ``s3_prefix`` is set to: ``2025``, then the file path
+                ``/home/ubuntu/Desktop/S3Upload/sub/photo.jpg`` will be uploaded as ``2025/S3Upload/sub/photo.jpg``
         """
         self.session = boto3.Session(
             profile_name=profile_name or getenv("PROFILE_NAME"),
