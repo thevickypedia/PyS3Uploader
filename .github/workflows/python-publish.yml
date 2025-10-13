@@ -11,45 +11,28 @@ on:
 jobs:
   pypi-publisher:
     runs-on: thevickypedia-default
+    outputs:
+      version: ${{ steps.publish.outputs.version }}
     steps:
       - uses: actions/checkout@v5
-      - uses: thevickypedia/pypi-publisher@v3
+      - uses: thevickypedia/pypi-publisher@v5
+        id: publish
         env:
           token: ${{ secrets.PYPI_TOKEN }}
 
-  set-version:
-    runs-on: thevickypedia-default
-    outputs:
-      project_version: ${{ steps.set-version.outputs.project_version }}
-    steps:
-      - uses: actions/checkout@v5
-      - name: Install module
-        run: |
-          pip install uv
-          uv pip install . --system
-        shell: bash
-      - name: Determine project version
-        id: set-version
-        run: |
-          echo "Resolving project version..."
-          echo "project_version=$(python -c 'import s3; print(s3.version)')" >> $GITHUB_OUTPUT
-        shell: bash
-
   release:
-    needs:
-      - set-version
-      - pypi-publisher
+    needs: pypi-publisher
     uses: ./.github/workflows/release.yml
     with:
-      project_version: ${{ needs.set-version.outputs.project_version }}
+      project_version: ${{ needs.pypi-publisher.outputs.version }}
     secrets: inherit
 
   release-notes:
     needs:
-      - set-version
       - release
+      - pypi-publisher
     if: ${{ needs.release.outputs.release_exists == 'false' }}
     uses: ./.github/workflows/notes.yml
     with:
-      project_version: ${{ needs.set-version.outputs.project_version }}
+      project_version: ${{ needs.pypi-publisher.outputs.version }}
     secrets: inherit

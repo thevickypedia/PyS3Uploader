@@ -2,6 +2,11 @@ name: update-release-notes
 
 on:
   workflow_dispatch:
+    inputs:
+      project_version:
+        type: string
+        description: Version of the project to update release notes for
+        required: true
   workflow_call:
     inputs:
       project_version:
