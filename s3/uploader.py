@@ -5,6 +5,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 from typing import Dict, Iterable
 
 import boto3.resources.factory
+import dotenv
 from botocore.config import Config
 from botocore.exceptions import ClientError
 from tqdm import tqdm
@@ -44,6 +45,7 @@ class Uploader:
         aws_secret_access_key: str = None,
         retry_config: Config = RETRY_CONFIG,
         logger: logging.Logger = None,
+        env_file: str = None,
     ):
         """Initiates all the necessary args and creates a boto3 session with retry logic.
 
@@ -61,6 +63,7 @@ class Uploader:
             aws_access_key_id: AWS access key ID.
             aws_secret_access_key: AWS secret access key.
             logger: Bring your own logger.
+            env_file: Dotenv file (.env) filepath to load environment variables.
 
         See Also:
             s3_prefix:
@@ -75,7 +78,34 @@ class Uploader:
 
                 If exclude_prefix is set to: ``/home/ubuntu/Desktop``, then the file path
                 ``/home/ubuntu/Desktop/S3Upload/sub-dir/photo.jpg`` will be uploaded as ``S3Upload/sub-dir/photo.jpg``
+
+            env_file:
+                Environment variables can be loaded from a .env file.
+                The filepath can be set as ``env_file`` during object instantiation or as an environment variable.
+                If a filepath is provided, PyS3Uploader loads it directly or searches the root directory for the file.
+                If no filepath is provided, PyS3Uploader searches the current directory for a .env file.
         """
+        self.logger = logger or default_logger()
+        self.env_file = env_file or getenv("ENV_FILE", default=".env")
+
+        # Check for env_file in current working directory
+        if os.path.isfile(self.env_file):
+            self.logger.debug("Loading env file: %s", self.env_file)
+            dotenv.load_dotenv(dotenv_path=self.env_file, override=True)
+        # Find the env_file from root
+        elif env_file := dotenv.find_dotenv(self.env_file, raise_error_if_not_found=False):
+            self.logger.debug("Loading env file: %s", env_file)
+            dotenv.load_dotenv(dotenv_path=env_file, override=True)
+        else:
+            # Scan current working directory for any .env files
+            for file in os.listdir():
+                if file.endswith(".env"):
+                    self.logger.debug("Loading env file: %s", file)
+                    dotenv.load_dotenv(dotenv_path=file, override=True)
+                    break
+            else:
+                self.logger.debug("No .env files found to load")
+
         self.session = boto3.Session(
             profile_name=profile_name or getenv("PROFILE_NAME"),
             region_name=region_name or getenv("AWS_DEFAULT_REGION"),
@@ -83,8 +113,6 @@ class Uploader:
             aws_secret_access_key=aws_secret_access_key or getenv("AWS_SECRET_ACCESS_KEY"),
         )
         self.s3 = self.session.resource(service_name="s3", config=retry_config)
-
-        self.logger = logger or default_logger()
 
         self.bucket_name = bucket_name
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
