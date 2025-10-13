@@ -1,6 +1,15 @@
 Release Notes
 =============
 
+v0.2.0 (10/13/2025)
+-------------------
+- [e92500c](https://github.com/thevickypedia/PyS3Uploader/commit/e92500cf9bc6f0d8fda3670a8daaba4e6da0be1c) chore: Release ``v0.2.0``
+- [f824e3b](https://github.com/thevickypedia/PyS3Uploader/commit/f824e3b9f57cda508b3a144a49080b4fafc487c9) refactor: Move file size checker into its own function
+- [1f6668c](https://github.com/thevickypedia/PyS3Uploader/commit/1f6668c1d57b80920d12d7f5130757fcff0cf59c) feat: Include an overwrite protection (enabled by default)
+- [4e35d4d](https://github.com/thevickypedia/PyS3Uploader/commit/4e35d4d9dba0e3a5761457940a049429aa59d228) chore: Update .gitignore
+- [b54d0a5](https://github.com/thevickypedia/PyS3Uploader/commit/b54d0a523582cd756d5c60fdd66e431412614dee) fix: Address missing version info in CI pipelines
+- [c3cc4e2](https://github.com/thevickypedia/PyS3Uploader/commit/c3cc4e2f3cd4b1a17d60c5087a44471f9e1fd9d6) chore: Update release notes for v
+
 v0.1.2 (10/13/2025)
 -------------------
 - [1d91d01](https://github.com/thevickypedia/PyS3Uploader/commit/1d91d017c982cedb47313063661024f2847727eb) chore: Release ``v0.1.2``
