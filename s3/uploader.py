@@ -47,10 +47,10 @@ class Uploader:
             logger: Bring your own logger.
         """
         self.session = boto3.Session(
-            profile_name=profile_name or os.environ.get("PROFILE_NAME"),
-            region_name=region_name or os.environ.get("AWS_DEFAULT_REGION"),
-            aws_access_key_id=aws_access_key_id or os.environ.get("AWS_ACCESS_KEY_ID"),
-            aws_secret_access_key=aws_secret_access_key or os.environ.get("AWS_SECRET_ACCESS_KEY"),
+            profile_name=profile_name or getenv("PROFILE_NAME"),
+            region_name=region_name or getenv("AWS_DEFAULT_REGION"),
+            aws_access_key_id=aws_access_key_id or getenv("AWS_ACCESS_KEY_ID"),
+            aws_secret_access_key=aws_secret_access_key or getenv("AWS_SECRET_ACCESS_KEY"),
         )
         self.s3 = self.session.resource(service_name="s3", config=self.RETRY_CONFIG)
         self.logger = logger or default_logger()
@@ -119,16 +119,19 @@ class Uploader:
         for __path, __directory, __files in os.walk(self.upload_dir):
             for file_ in __files:
                 file_path = os.path.join(__path, file_)
-                try:
-                    object_path = get_object_path(file_path, self.prefix_dir)
-                except ValueError as error:
-                    self.logger.error(error)
-                    continue
+                if self.prefix_dir:
+                    try:
+                        object_path = get_object_path(file_path, self.prefix_dir)
+                    except ValueError as error:
+                        self.logger.error(error)
+                        continue
+                else:
+                    object_path = self.prefix_dir
                 files_to_upload[object_path] = file_path
         return files_to_upload
 
     def run(self) -> None:
-        """Initiates bucket download in a traditional loop."""
+        """Initiates object upload in a traditional loop."""
         self.init()
         keys = self._get_files()
         self.logger.debug(keys)

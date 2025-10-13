@@ -8,7 +8,7 @@ from typing import Dict, Set
 
 
 class S3Error(Exception):
-    """Custom error for base exception to the s3-downloader module."""
+    """Custom error for base exception to the PyS3Uploader module."""
 
 
 class BucketNotFound(S3Error):
