@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+
+    <title>PyS3Uploader &#8212; PyS3Uploader  documentation</title>
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="_static/classic.css" />
+    <link rel="stylesheet" type="text/css" href="_static/static.css" />
+    
+    <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+    <script src="_static/jquery.js"></script>
+    <script src="_static/underscore.js"></script>
+    <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+    <script src="_static/doctools.js"></script>
+    
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyS3Uploader  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PyS3Uploader</a></li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <p><strong>Versions Supported</strong></p>
+<p><img alt="Python" src="https://img.shields.io/badge/python-3.11-blue" /></p>
+<p><strong>Language Stats</strong></p>
+<p><img alt="Language count" src="https://img.shields.io/github/languages/count/thevickypedia/PyS3Uploader" />
+<img alt="Code coverage" src="https://img.shields.io/github/languages/top/thevickypedia/PyS3Uploader" /></p>
+<p><strong>Repo Stats</strong></p>
+<p><a class="reference external" href="https://github.com/thevickypedia/PyS3Uploader/blob/main/LICENSE"><img alt="GitHub" src="https://img.shields.io/github/license/thevickypedia/PyS3Uploader" /></a>
+<a class="reference external" href="https://api.github.com/repos/thevickypedia/PyS3Uploader"><img alt="GitHub repo size" src="https://img.shields.io/github/repo-size/thevickypedia/PyS3Uploader" /></a>
+<a class="reference external" href="https://api.github.com/repos/thevickypedia/PyS3Uploader"><img alt="GitHub code size" src="https://img.shields.io/github/languages/code-size/thevickypedia/PyS3Uploader" /></a></p>
+<p><strong>Activity</strong></p>
+<p><a class="reference external" href="https://api.github.com/repos/thevickypedia/PyS3Uploader"><img alt="GitHub Repo created" src="https://img.shields.io/date/1618966420" /></a>
+<a class="reference external" href="https://api.github.com/repos/thevickypedia/PyS3Uploader"><img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/y/thevickypedia/PyS3Uploader" /></a>
+<a class="reference external" href="https://api.github.com/repos/thevickypedia/PyS3Uploader"><img alt="GitHub last commit" src="https://img.shields.io/github/last-commit/thevickypedia/PyS3Uploader" /></a></p>
+<section id="pys3uploader">
+<h1>PyS3Uploader<a class="headerlink" href="#pys3uploader" title="Permalink to this heading">¶</a></h1>
+<p>Python module to upload an entire directory to an S3 bucket.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this heading">¶</a></h2>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span>PyS3Uploader
+</pre></div>
+</div>
+</section>
+<section id="usage">
+<h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
+<section id="upload-objects-in-parallel">
+<h3>Upload objects in parallel<a class="headerlink" href="#upload-objects-in-parallel" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">s3</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
+        <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;BUCKET_NAME&quot;</span><span class="p">,</span>
+        <span class="n">upload_dir</span><span class="o">=</span><span class="s2">&quot;FULL_PATH_TO_UPLOAD&quot;</span><span class="p">,</span>
+        <span class="n">prefix_dir</span><span class="o">=</span><span class="s2">&quot;START_DIRECTORY_IN_S3&quot;</span>
+    <span class="p">)</span>
+    <span class="n">wrapper</span><span class="o">.</span><span class="n">run_in_parallel</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="upload-objects-in-sequence">
+<h3>Upload objects in sequence<a class="headerlink" href="#upload-objects-in-sequence" title="Permalink to this heading">¶</a></h3>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">s3</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
+        <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;BUCKET_NAME&quot;</span><span class="p">,</span>
+        <span class="n">upload_dir</span><span class="o">=</span><span class="s2">&quot;FULL_PATH_TO_UPLOAD&quot;</span><span class="p">,</span>
+        <span class="n">prefix_dir</span><span class="o">=</span><span class="s2">&quot;START_DIRECTORY_IN_S3&quot;</span>
+    <span class="p">)</span>
+    <span class="n">wrapper</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+</div>
+</section>
+<section id="mandatory-arg">
+<h3>Mandatory arg<a class="headerlink" href="#mandatory-arg" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>bucket_name</strong> - Name of the s3 bucket.</p></li>
+<li><p><strong>upload_dir</strong> - Directory to upload.</p></li>
+</ul>
+</section>
+<section id="optional-kwargs">
+<h3>Optional kwargs<a class="headerlink" href="#optional-kwargs" title="Permalink to this heading">¶</a></h3>
+<ul class="simple">
+<li><p><strong>prefix_dir</strong> - Start directory from <code class="docutils literal notranslate"><span class="pre">upload_dir</span></code> to use as root in S3. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
+<li><p><strong>logger</strong> - Bring your own custom pre-configured logger. Defaults to on-screen logging.
+<br><br></p></li>
+<li><p><strong>region_name</strong> - AWS region name. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">AWS_DEFAULT_REGION</span></code></p></li>
+<li><p><strong>profile_name</strong> - AWS profile name. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">PROFILE_NAME</span></code></p></li>
+<li><p><strong>aws_access_key_id</strong> - AWS access key ID. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">AWS_ACCESS_KEY_ID</span></code></p></li>
+<li><p><strong>aws_secret_access_key</strong> - AWS secret access key. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">AWS_SECRET_ACCESS_KEY</span></code></p></li>
+</ul>
+<blockquote>
+<div><p>AWS values are loaded from env vars or the default config at <code class="docutils literal notranslate"><span class="pre">~/.aws/config</span></code> / <code class="docutils literal notranslate"><span class="pre">~/.aws/credentials</span></code></p>
+</div></blockquote>
+</section>
+</section>
+<section id="coding-standards">
+<h2>Coding Standards<a class="headerlink" href="#coding-standards" title="Permalink to this heading">¶</a></h2>
+<p>Docstring format: <a class="reference external" href="https://google.github.io/styleguide/pyguide.html#38-comments-and-docstrings"><code class="docutils literal notranslate"><span class="pre">Google</span></code></a> <br>
+Styling conventions: <a class="reference external" href="https://www.python.org/dev/peps/pep-0008/"><code class="docutils literal notranslate"><span class="pre">PEP</span> <span class="pre">8</span></code></a> <br>
+Clean code with pre-commit hooks: <a class="reference external" href="https://flake8.pycqa.org/en/latest/"><code class="docutils literal notranslate"><span class="pre">flake8</span></code></a> and
+<a class="reference external" href="https://pycqa.github.io/isort/"><code class="docutils literal notranslate"><span class="pre">isort</span></code></a></p>
+</section>
+<section id="release-notes">
+<h2><a class="reference external" href="https://github.com/thevickypedia/PyS3Uploader/blob/main/release_notes.rst">Release Notes</a><a class="headerlink" href="#release-notes" title="Permalink to this heading">¶</a></h2>
+<p><strong>Requirement</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>python<span class="w"> </span>-m<span class="w"> </span>pip<span class="w"> </span>install<span class="w"> </span>gitverse
+</pre></div>
+</div>
+<p><strong>Usage</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>gitverse-release<span class="w"> </span>reverse<span class="w"> </span>-f<span class="w"> </span>release_notes.rst<span class="w"> </span>-t<span class="w"> </span><span class="s1">&#39;Release Notes&#39;</span>
+</pre></div>
+</div>
+</section>
+<section id="linting">
+<h2>Linting<a class="headerlink" href="#linting" title="Permalink to this heading">¶</a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">pre-commit</span></code> will ensure linting, run pytest, generate runbook &amp; release notes, and validate hyperlinks in ALL
+markdown files (including Wiki pages)</p>
+<p><strong>Requirement</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pip<span class="w"> </span>install<span class="w"> </span><span class="nv">sphinx</span><span class="o">==</span><span class="m">5</span>.1.1<span class="w"> </span>pre-commit<span class="w"> </span>recommonmark
+</pre></div>
+</div>
+<p><strong>Usage</strong></p>
+<div class="highlight-shell notranslate"><div class="highlight"><pre><span></span>pre-commit<span class="w"> </span>run<span class="w"> </span>--all-files
+</pre></div>
+</div>
+<section id="pypi-package">
+<h3>Pypi Package<a class="headerlink" href="#pypi-package" title="Permalink to this heading">¶</a></h3>
+<p><a class="reference external" href="https://packaging.python.org/tutorials/packaging-projects/"><img alt="pypi-module" src="https://img.shields.io/badge/Software%20Repository-pypi-1f425f.svg" /></a></p>
+<p><a class="reference external" href="https://pypi.org/project/PyS3Uploader/">https://pypi.org/project/PyS3Uploader/</a></p>
+</section>
+</section>
+<section id="license-copyright">
+<h2>License &amp; copyright<a class="headerlink" href="#license-copyright" title="Permalink to this heading">¶</a></h2>
+<p>© Vignesh Rao</p>
+<p>Licensed under the <a class="reference external" href="https://github.com/thevickypedia/PyS3Uploader/blob/main/LICENSE">MIT License</a></p>
+</section>
+</section>
+
+
+            <div class="clearer"></div>
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+  <div>
+    <h3><a href="index.html">Table of Contents</a></h3>
+    <ul>
+<li><a class="reference internal" href="#">PyS3Uploader</a><ul>
+<li><a class="reference internal" href="#installation">Installation</a></li>
+<li><a class="reference internal" href="#usage">Usage</a><ul>
+<li><a class="reference internal" href="#upload-objects-in-parallel">Upload objects in parallel</a></li>
+<li><a class="reference internal" href="#upload-objects-in-sequence">Upload objects in sequence</a></li>
+<li><a class="reference internal" href="#mandatory-arg">Mandatory arg</a></li>
+<li><a class="reference internal" href="#optional-kwargs">Optional kwargs</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#coding-standards">Coding Standards</a></li>
+<li><a class="reference internal" href="#release-notes">Release Notes</a></li>
+<li><a class="reference internal" href="#linting">Linting</a><ul>
+<li><a class="reference internal" href="#pypi-package">Pypi Package</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#license-copyright">License &amp; copyright</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
+  <div role="note" aria-label="source link">
+    <h3>This Page</h3>
+    <ul class="this-page-menu">
+      <li><a href="_sources/README.md.txt"
+            rel="nofollow">Show Source</a></li>
+    </ul>
+   </div>
+<div id="searchbox" style="display: none" role="search">
+  <h3 id="searchlabel">Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" aria-labelledby="searchlabel" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false"/>
+      <input type="submit" value="Go" />
+    </form>
+    </div>
+</div>
+<script>document.getElementById('searchbox').style.display = "block"</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">PyS3Uploader  documentation</a> &#187;</li>
+        <li class="nav-item nav-item-this"><a href="">PyS3Uploader</a></li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2025, Vignesh Rao.
+      Created using <a href="https://www.sphinx-doc.org/">Sphinx</a> 5.1.1.
+    </div>
+  </body>
+</html>

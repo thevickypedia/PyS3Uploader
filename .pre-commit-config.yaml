@@ -44,11 +44,11 @@ repos:
       - id: isort
         args: [ --profile, black ]
 
-#  - repo: local
-#    hooks:
-#      - id: pytest_docs
-#        name: generate runbook
-#        entry: /bin/bash pre_commit.sh
-#        language: system
-#        pass_filenames: false
-#        always_run: true
+  - repo: local
+    hooks:
+      - id: pytest_docs
+        name: generate runbook
+        entry: /bin/bash pre_commit.sh
+        language: system
+        pass_filenames: false
+        always_run: true
