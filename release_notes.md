@@ -1,8 +1,18 @@
 Release Notes
 =============
 
-v (10/13/2025)
---------------
+v0.1.2 (10/13/2025)
+-------------------
+- [1d91d01](https://github.com/thevickypedia/PyS3Uploader/commit/1d91d017c982cedb47313063661024f2847727eb) chore: Release ``v0.1.2``
+- [bc792ea](https://github.com/thevickypedia/PyS3Uploader/commit/bc792eab4f60812736c00f157862a2cc796d3824) docs: Update runbook
+- [8c150d9](https://github.com/thevickypedia/PyS3Uploader/commit/8c150d98aedb63bc6fe4bf1cf91d8b8d446b765b) fix: Filepath and relative path mixed up with object key
+- [77a2a6c](https://github.com/thevickypedia/PyS3Uploader/commit/77a2a6c7c087a287318049d1e8ceb47e6717b7b5) feat: Add a new feature to print S3 object tree
+- [c0df5d7](https://github.com/thevickypedia/PyS3Uploader/commit/c0df5d70dade7338e35f7b5d86508d5b3a956d44) docs: Update repo timestamp in label
+- [9c855cf](https://github.com/thevickypedia/PyS3Uploader/commit/9c855cf9cda4cae94e68c4aa8ad670fcd4fd51f2) chore: Update .gitignore
+- [b07e882](https://github.com/thevickypedia/PyS3Uploader/commit/b07e8827d43f3b950a0127995bfe070a07c9a902) ci: Install requirements before resolving project version
+
+v0.1.1 (10/13/2025)
+-------------------
 - [fde9dd5](https://github.com/thevickypedia/PyS3Uploader/commit/fde9dd57d19b788ffbd76acf198589ed76532c05) chore: Release ``v0.1.1``
 - [c5488ce](https://github.com/thevickypedia/PyS3Uploader/commit/c5488ce0d1ba79c7aaaf53c8cd2620f392977c68) docs: Update README.md and runbook
 - [ed7794d](https://github.com/thevickypedia/PyS3Uploader/commit/ed7794dfac207eed88f8ce88da268006a5f097ea) perf: Simplify the logic to exclude true path from S3 object prefix
