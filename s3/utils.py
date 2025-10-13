@@ -1,6 +1,8 @@
 import os
 from typing import Dict, Set
 
+from botocore.config import Config
+
 
 class UploadResults(dict):
     """Object to store results of S3 upload.
@@ -11,6 +13,18 @@ class UploadResults(dict):
 
     success: int = 0
     failed: int = 0
+
+
+RETRY_CONFIG: Config = Config(
+    retries={
+        "max_attempts": 10,
+        "mode": "adaptive",  # Adaptive retry mode with jitter
+        "total_max_attempts": 20,  # Max retries across all requests
+    },
+    # Adding custom timeouts here:
+    connect_timeout=5,  # 5 seconds for establishing a connection
+    read_timeout=30,  # 30 seconds to wait for a response from the server
+)
 
 
 def getenv(*args, default: str = None) -> str:

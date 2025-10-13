@@ -11,7 +11,13 @@ from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
 from s3.logger import default_logger
-from s3.utils import UploadResults, convert_to_folder_structure, getenv, urljoin
+from s3.utils import (
+    RETRY_CONFIG,
+    UploadResults,
+    convert_to_folder_structure,
+    getenv,
+    urljoin,
+)
 
 
 class Uploader:
@@ -20,8 +26,6 @@ class Uploader:
     >>> Uploader
 
     """
-
-    RETRY_CONFIG: Config = Config(retries={"max_attempts": 10, "mode": "standard"})
 
     def __init__(
         self,
@@ -34,6 +38,7 @@ class Uploader:
         profile_name: str = None,
         aws_access_key_id: str = None,
         aws_secret_access_key: str = None,
+        retry_config: Config = RETRY_CONFIG,
         logger: logging.Logger = None,
     ):
         """Initiates all the necessary args and creates a boto3 session with retry logic.
@@ -51,18 +56,18 @@ class Uploader:
             logger: Bring your own logger.
 
         See Also:
+            s3_prefix:
+                If provided, ``s3_prefix`` will always be attached to each object.
+
+                If ``s3_prefix`` is set to: ``2025``, then the file path
+                ``/home/ubuntu/Desktop/S3Upload/sub/photo.jpg`` will be uploaded as ``2025/S3Upload/sub/photo.jpg``
+
             exclude_path:
                 When upload directory is "/home/ubuntu/Desktop/S3Upload", each file will naturally have the full prefix.
                 However, this behavior can be avoided by specifying the ``exclude_path`` parameter.
 
                 If exclude_path is set to: ``/home/ubuntu/Desktop``, then the file path
                 ``/home/ubuntu/Desktop/S3Upload/sub-dir/photo.jpg`` will be uploaded as ``S3Upload/sub-dir/photo.jpg``
-
-            s3_prefix:
-                If provided, ``s3_prefix`` will always be attached to each object.
-
-                If ``s3_prefix`` is set to: ``2025``, then the file path
-                ``/home/ubuntu/Desktop/S3Upload/sub/photo.jpg`` will be uploaded as ``2025/S3Upload/sub/photo.jpg``
         """
         self.session = boto3.Session(
             profile_name=profile_name or getenv("PROFILE_NAME"),
@@ -70,7 +75,7 @@ class Uploader:
             aws_access_key_id=aws_access_key_id or getenv("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=aws_secret_access_key or getenv("AWS_SECRET_ACCESS_KEY"),
         )
-        self.s3 = self.session.resource(service_name="s3", config=self.RETRY_CONFIG)
+        self.s3 = self.session.resource(service_name="s3", config=retry_config)
 
         self.logger = logger or default_logger()
 
