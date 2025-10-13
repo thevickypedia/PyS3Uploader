@@ -6,3 +6,4 @@ venv/
 build/
 .idea/
 PyS3Uploader.egg-info/
+_build/
