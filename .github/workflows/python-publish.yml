@@ -1,0 +1,14 @@
+name: pypi-publish
+
+on:
+  workflow_dispatch:
+  release:
+    types: [ published ]
+
+jobs:
+  pypi-publisher:
+    runs-on: thevickypedia-default
+    steps:
+      - uses: thevickypedia/pypi-publisher@v3
+        env:
+          token: ${{ secrets.PYPI_TOKEN }}
