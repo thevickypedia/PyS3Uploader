@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+v (10/13/2025)
+--------------
+- [fde9dd5](https://github.com/thevickypedia/PyS3Uploader/commit/fde9dd57d19b788ffbd76acf198589ed76532c05) chore: Release ``v0.1.1``
+- [c5488ce](https://github.com/thevickypedia/PyS3Uploader/commit/c5488ce0d1ba79c7aaaf53c8cd2620f392977c68) docs: Update README.md and runbook
+- [ed7794d](https://github.com/thevickypedia/PyS3Uploader/commit/ed7794dfac207eed88f8ce88da268006a5f097ea) perf: Simplify the logic to exclude true path from S3 object prefix
+- [5c3b1ce](https://github.com/thevickypedia/PyS3Uploader/commit/5c3b1cedeb893aa8904b3b8df2e851b713073350) feat: Upload to a specific S3 path prefix along with a start folder filter
+- [842d3be](https://github.com/thevickypedia/PyS3Uploader/commit/842d3be33012d1f23c38a575ea787120ca971401) revert: Revert normalizing S3 object path
+- [8d4dd7f](https://github.com/thevickypedia/PyS3Uploader/commit/8d4dd7f79bd1d24f4508b7a1fadd5ac8aa7500ae) fix: Normalize S3 object path to be OS-agnostic
+- [f58dfe2](https://github.com/thevickypedia/PyS3Uploader/commit/f58dfe26e827837df96df81c2ae53d43f5efa2c1) fix: Update project version fetch in python-publish.yml
+- [b3b59a2](https://github.com/thevickypedia/PyS3Uploader/commit/b3b59a20831c0c467d6f887bebea392f9ab1276a) chore: Update release notes for v
+
 v0.1.0 (10/13/2025)
 -------------------
 - [f632294](https://github.com/thevickypedia/PyS3Uploader/commit/f63229464c7324c93a998c151c6ac695aafe24fe) chore: Release ``v0.1.0``
