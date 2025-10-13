@@ -1,6 +1,14 @@
 Release Notes
 =============
 
+v0.2.2 (10/13/2025)
+-------------------
+- [8892dfa](https://github.com/thevickypedia/PyS3Uploader/commit/8892dfa78bb7fdb489376c1499fbc39664a60607) chore: Release ``v0.2.2``
+- [20845d9](https://github.com/thevickypedia/PyS3Uploader/commit/20845d98aab961c2eff3d7aa34991dbde025aa66) ci: Update release workflow to handle initial release
+- [b040a6d](https://github.com/thevickypedia/PyS3Uploader/commit/b040a6d6f5c0dd6890864d3c1c7df6dab6502aba) docs: Update runbook
+- [63068d0](https://github.com/thevickypedia/PyS3Uploader/commit/63068d0a3427b9a75bb2d4227eaf8b513c260de1) refactor: Log run time in humanized format rather than just seconds
+- [33c6866](https://github.com/thevickypedia/PyS3Uploader/commit/33c6866b3028289ede02a9f8ac886337d8bca24c) chore: Update release notes for v0.2.1
+
 v0.2.1 (10/13/2025)
 -------------------
 - [299f0f1](https://github.com/thevickypedia/PyS3Uploader/commit/299f0f14d410434fc11819906ed93d788da8b888) chore: Release ``v0.2.1``
