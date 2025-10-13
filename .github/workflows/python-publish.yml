@@ -23,6 +23,11 @@ jobs:
       project_version: ${{ steps.set-version.outputs.project_version }}
     steps:
       - uses: actions/checkout@v5
+      - name: Install module
+        run: |
+          pip install uv
+          uv pip install . --system
+        shell: bash
       - name: Determine project version
         id: set-version
         run: |
