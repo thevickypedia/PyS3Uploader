@@ -226,7 +226,7 @@ class Uploader:
         self.logger.debug(keys)
         self.logger.info("%d files from '%s' will be uploaded to '%s'", len(keys), self.upload_dir, self.bucket_name)
         self.logger.info("Initiating upload process.")
-        for objectpath, filepath in tqdm(
+        for filepath, objectpath in tqdm(
             keys.items(), total=len(keys), unit="file", leave=True, desc=f"Uploading files from {self.upload_dir}"
         ):
             try:
