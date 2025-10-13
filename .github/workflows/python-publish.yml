@@ -27,7 +27,7 @@ jobs:
         id: set-version
         run: |
           echo "Resolving project version..."
-          echo "project_version=$(python -c 'import importlib.metadata; print(importlib.metadata.version("PyS3Uploader"))')" >> $GITHUB_OUTPUT
+          echo "project_version=$(python -c 'import s3; print(s3.version)')" >> $GITHUB_OUTPUT
         shell: bash
 
   release:
