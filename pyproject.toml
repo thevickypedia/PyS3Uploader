@@ -1,6 +1,6 @@
 [project]
 name = "PyS3Uploader"
-version = "0.0.0a0"
+dynamic = ["version"]
 description = "Python module to upload objects to an S3 bucket."
 readme = { file = "README.md", content-type = "text/markdown" }
 authors = [{ name = "Vignesh Rao", email = "svignesh1793@gmail.com" }]
@@ -14,8 +14,8 @@ classifiers = [
     "Topic :: Internet :: File Transfer Protocol (FTP)"
 ]
 dependencies = [
-    "boto3",
-    "tqdm"
+    "boto3==1.40.*",
+    "tqdm==4.67.*"
 ]
 keywords = ["s3"]
 requires-python = ">=3.11"
@@ -26,6 +26,9 @@ packages = ["s3"]
 [build-system]
 requires = ["setuptools<77", "wheel", "build"]
 build-backend = "setuptools.build_meta"
+
+[tool.setuptools.dynamic]
+version = { attr = "s3.version" }
 
 [project.optional-dependencies]
 dev = ["sphinx==5.1.1", "pre-commit", "recommonmark"]

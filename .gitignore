@@ -1,4 +1,7 @@
-.idea
-venv
 .env
 temp.py
+
+dist/
+venv/
+.idea/
+PyS3Uploader.egg-info/
