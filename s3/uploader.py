@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
 from s3.logger import default_logger
-from s3.utils import UploadResults, get_object_path, getenv, urljoin
+from s3.utils import UploadResults, getenv, urljoin
 
 
 class Uploader:
@@ -28,7 +28,7 @@ class Uploader:
         bucket_name: str,
         upload_dir: str,
         s3_prefix: str = None,
-        start_folder: str = None,
+        exclude_path: str = None,
         region_name: str = None,
         profile_name: str = None,
         aws_access_key_id: str = None,
@@ -39,14 +39,19 @@ class Uploader:
 
         Args:
             bucket_name: Name of the bucket.
-            upload_dir: Name of the directory to be uploaded.
+            upload_dir: Full path of the directory to be uploaded.
             s3_prefix: Particular bucket prefix within which the upload should happen.
-            start_folder: Start folder name from upload_dir.
+            exclude_path: Full directory path to exclude from S3 object prefix.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
             aws_secret_access_key: AWS secret access key.
             logger: Bring your own logger.
+
+        See Also:
+            exclude_path:
+                When upload directory is "/home/ubuntu/Desktop/S3Upload", each file will naturally have the full prefix.
+                This can be avoided by specifying exclude_path parameter
         """
         self.session = boto3.Session(
             profile_name=profile_name or getenv("PROFILE_NAME"),
@@ -56,9 +61,9 @@ class Uploader:
         )
         self.s3 = self.session.resource(service_name="s3", config=self.RETRY_CONFIG)
         self.logger = logger or default_logger()
-        self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "SOURCE")
+        self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
         self.s3_prefix = s3_prefix
-        self.start_folder = start_folder
+        self.exclude_path = exclude_path
         self.bucket_name = bucket_name
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = None
@@ -73,9 +78,9 @@ class Uploader:
             BucketNotFound: If bucket name was not found.
         """
         self.start = time.time()
-        if self.start_folder and self.start_folder not in self.upload_dir.split(os.sep):
+        if self.exclude_path and self.exclude_path not in self.upload_dir:
             raise ValueError(
-                f"\n\n\tStart folder {self.start_folder!r} is not a part of upload directory {self.upload_dir!r}"
+                f"\n\n\tStart folder {self.exclude_path!r} is not a part of upload directory {self.upload_dir!r}"
             )
         if not self.upload_dir:
             raise ValueError("\n\n\tCannot proceed without an upload directory.")
@@ -90,7 +95,6 @@ class Uploader:
         if self.bucket_name not in buckets:
             raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found in {_alias} account.\n\tAvailable: {buckets}")
         self.upload_dir = os.path.abspath(self.upload_dir)
-        self.logger.info("Bucket objects from '%s' will be uploaded to '%s'", self.upload_dir, self.bucket_name)
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = self.s3.Bucket(self.bucket_name)
 
@@ -122,14 +126,8 @@ class Uploader:
         for __path, __directory, __files in os.walk(self.upload_dir):
             for file_ in __files:
                 file_path = os.path.join(__path, file_)
-                if self.start_folder:
-                    try:
-                        relative_path = get_object_path(file_path, self.start_folder)
-                    except ValueError as error:
-                        self.logger.error(error)
-                        continue
-                else:
-                    relative_path = self.start_folder
+                if self.exclude_path:
+                    file_path = file_path.replace(self.exclude_path, "")
                 # Lists in python are ordered, so s3 prefix will get loaded first when provided
                 url_parts = []
                 if self.s3_prefix:
@@ -137,8 +135,9 @@ class Uploader:
                         self.s3_prefix.split(os.sep) if os.sep in self.s3_prefix else self.s3_prefix.split("/")
                     )
                 # Add rest of the file path to parts before normalizing as an S3 object URL
-                url_parts.extend(relative_path.split(os.sep))
-                object_path = urljoin(*url_parts)
+                url_parts.extend(file_path.split(os.sep))
+                # Remove falsy values using filter - "None", "bool", "len" or "lambda item: item"
+                object_path = urljoin(*filter(None, url_parts))
                 files_to_upload[object_path] = file_path
         return files_to_upload
 
@@ -147,6 +146,7 @@ class Uploader:
         self.init()
         keys = self._get_files()
         self.logger.debug(keys)
+        self.logger.info("%d files from '%s' will be uploaded to '%s'", len(keys), self.upload_dir, self.bucket_name)
         self.logger.info("Initiating upload process.")
         for objectpath, filepath in tqdm(
             keys.items(), total=len(keys), unit="file", leave=True, desc=f"Uploading files from {self.upload_dir}"
@@ -166,10 +166,15 @@ class Uploader:
             max_workers: Number of maximum threads to use.
         """
         self.init()
-        self.logger.info(f"Number of threads: {max_workers}")
         keys = self._get_files()
         self.logger.debug(keys)
-        self.logger.info("Initiating upload process.")
+        self.logger.info(
+            "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
+            len(keys),
+            self.upload_dir,
+            self.bucket_name,
+            max_workers,
+        )
         with ThreadPoolExecutor(max_workers=max_workers) as executor:
             futures = [executor.submit(self._uploader, *kv) for kv in keys.items()]
             for future in tqdm(
