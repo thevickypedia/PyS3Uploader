@@ -1,4 +1,4 @@
-name: Update Release Notes
+name: update-release-notes
 
 on:
   workflow_dispatch:

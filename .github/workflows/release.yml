@@ -1,4 +1,4 @@
-name: Create GitHub Release
+name: create-gh-release
 
 on:
   workflow_dispatch:
