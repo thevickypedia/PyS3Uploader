@@ -42,4 +42,4 @@ def get_object_path(filepath: str, start_folder_name: str):
     # Reconstruct path from start_folder_name onwards
     relative_parts = parts[start_index:]
     # Join with os.sep for system-appropriate separators
-    return os.sep.join(relative_parts)
+    return "/".join(relative_parts)
