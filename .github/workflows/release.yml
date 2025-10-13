@@ -57,13 +57,24 @@ jobs:
         run: |
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git config user.name "github-actions[bot]"
-          git fetch --prune --unshallow
+          git fetch --prune --unshallow || true
           git fetch --tags
-          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^)
-          echo "::notice title=Previous Release::${PREV_TAG}"
+
+          # Try to get the previous tag
+          PREV_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+
           echo "::notice title=Current Release::v${{ env.project_version }}"
+
           repository="${{ github.server_url }}/${{ github.repository }}"
-          git log "${PREV_TAG}..HEAD" --pretty=format:"- [%h](${repository}/commit/%H) %s" --no-merges > release_notes.txt
+
+          if [ -z "$PREV_TAG" ]; then
+            echo "::notice title=Previous Release::(none - first release)"
+            git log --pretty=format:"- [%h](${repository}/commit/%H) %s" --no-merges > release_notes.txt
+          else
+            echo "::notice title=Previous Release::${PREV_TAG}"
+            git log "${PREV_TAG}..HEAD" --pretty=format:"- [%h](${repository}/commit/%H) %s" --no-merges > release_notes.txt
+          fi
+
           cat release_notes.txt
         shell: bash
 
