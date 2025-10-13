@@ -33,6 +33,7 @@ class Uploader:
         upload_dir: str,
         s3_prefix: str = None,
         exclude_path: str = None,
+        skip_dot_files: bool = True,
         overwrite: bool = False,
         region_name: str = None,
         profile_name: str = None,
@@ -48,6 +49,7 @@ class Uploader:
             upload_dir: Full path of the directory to be uploaded.
             s3_prefix: Particular bucket prefix within which the upload should happen.
             exclude_path: Full directory path to exclude from S3 object prefix.
+            skip_dot_files: Boolean flag to skip dot files.
             overwrite: Boolean flag to overwrite files in S3.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
@@ -83,6 +85,7 @@ class Uploader:
         self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
         self.s3_prefix = s3_prefix
         self.exclude_path = exclude_path
+        self.skip_dot_files = skip_dot_files
         self.overwrite = overwrite
 
         self.results = UploadResults()
@@ -181,6 +184,9 @@ class Uploader:
         files_to_upload = {}
         for __path, __directory, __files in os.walk(self.upload_dir):
             for file_ in __files:
+                if self.skip_dot_files and file_.startswith("."):
+                    self.logger.info("Skipping dot file: %s", file_)
+                    continue
                 file_path = os.path.join(__path, file_)
                 if self.exclude_path:
                     relative_path = file_path.replace(self.exclude_path, "")
