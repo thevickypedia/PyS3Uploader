@@ -15,7 +15,7 @@
 
 **Activity**
 
-[![GitHub Repo created](https://img.shields.io/date/1618966420)][repo]
+[![GitHub Repo created](https://img.shields.io/date/1760313686)][repo]
 [![GitHub commit activity](https://img.shields.io/github/commit-activity/y/thevickypedia/PyS3Uploader)][repo]
 [![GitHub last commit](https://img.shields.io/github/last-commit/thevickypedia/PyS3Uploader)][repo]
 
