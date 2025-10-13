@@ -1,5 +1,5 @@
 import os
-from typing import Set, Dict
+from typing import Dict, Set
 
 
 class UploadResults(dict):
@@ -43,26 +43,26 @@ def convert_to_folder_structure(sequence: Set[str]) -> str:
     """
     folder_structure = {}
     for item in sequence:
-        parts = item.split('/')
+        parts = item.split("/")
         current_level = folder_structure
         for part in parts:
             current_level = current_level.setdefault(part, {})
 
-    def generate_folder_structure(structure: Dict[str, dict], indent: str = '') -> str:
+    def generate_folder_structure(structure: Dict[str, dict], indent: str = "") -> str:
         """Generates the folder like structure.
 
         Args:
             structure: Structure of folder objects as key-value pairs.
             indent: Required indentation for the ASCII.
         """
-        result = ''
+        result = ""
         for i, (key, value) in enumerate(structure.items()):
             if i == len(structure) - 1:
-                result += indent + '└── ' + key + '\n'
-                sub_indent = indent + '    '
+                result += indent + "└── " + key + "\n"
+                sub_indent = indent + "    "
             else:
-                result += indent + '├── ' + key + '\n'
-                sub_indent = indent + '│   '
+                result += indent + "├── " + key + "\n"
+                sub_indent = indent + "│   "
             if value:
                 result += generate_folder_structure(value, sub_indent)
         return result

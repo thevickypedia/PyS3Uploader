@@ -11,7 +11,7 @@ from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
 from s3.logger import default_logger
-from s3.utils import UploadResults, getenv, urljoin, convert_to_folder_structure
+from s3.utils import UploadResults, convert_to_folder_structure, getenv, urljoin
 
 
 class Uploader:
