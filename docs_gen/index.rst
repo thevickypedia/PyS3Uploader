@@ -17,21 +17,25 @@ PyS3Uploader
 
 .. automodule:: pys3uploader.uploader
 
-Utils
-=====
-.. automodule:: pys3uploader.utils
+Exceptions
+==========
+.. automodule:: pys3uploader.exceptions
 
 Logger
 ======
 .. automodule:: pys3uploader.logger
 
-Exceptions
-==========
-.. automodule:: pys3uploader.exceptions
+Progress
+========
+.. automodule:: pys3uploader.progress
 
 Tree
 ====
 .. automodule:: pys3uploader.tree
+
+Utils
+=====
+.. automodule:: pys3uploader.utils
 
 Indices and tables
 ==================

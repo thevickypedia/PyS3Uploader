@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
 
     <title>Welcome to PyS3Uploader’s documentation! &#8212; PyS3Uploader  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -160,7 +160,7 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pys3uploader.uploader.Uploader._uploader">
-<span class="sig-name descname"><span class="pre">_uploader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader._uploader" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">_uploader</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">callback</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pys3uploader.progress.ProgressPercentage" title="pys3uploader.progress.ProgressPercentage"><span class="pre">ProgressPercentage</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader._uploader" title="Permalink to this definition">¶</a></dt>
 <dd><p>Uploads the filepath to the specified S3 bucket.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -226,50 +226,33 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dd></dl>
 
 </section>
-<section id="module-pys3uploader.utils">
-<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-pys3uploader.utils" title="Permalink to this heading">¶</a></h1>
-<dl class="py class">
-<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults">
-<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">UploadResults</span></span><a class="headerlink" href="#pys3uploader.utils.UploadResults" title="Permalink to this definition">¶</a></dt>
-<dd><p>Object to store results of S3 upload.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">UploadResults</span>
+<section id="module-pys3uploader.exceptions">
+<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-pys3uploader.exceptions" title="Permalink to this heading">¶</a></h1>
+<p>Module to store all the custom exceptions and formatters.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S3Error</span>
 </pre></div>
 </div>
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults.success">
-<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pys3uploader.utils.UploadResults.success" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.S3Error">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">S3Error</span></span><a class="headerlink" href="#pys3uploader.exceptions.S3Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom error for base exception to the PyS3Uploader module.</p>
+</dd></dl>
 
-<dl class="py attribute">
-<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults.failed">
-<span class="sig-name descname"><span class="pre">failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pys3uploader.utils.UploadResults.failed" title="Permalink to this definition">¶</a></dt>
-<dd></dd></dl>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.BucketNotFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">BucketNotFound</span></span><a class="headerlink" href="#pys3uploader.exceptions.BucketNotFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom error for bucket not found.</p>
+</dd></dl>
 
+<dl class="py exception">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.NoObjectFound">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoObjectFound</span></span><a class="headerlink" href="#pys3uploader.exceptions.NoObjectFound" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom error for no objects found.</p>
 </dd></dl>
 
 <dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.getenv">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">getenv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.getenv" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the key-ed environment variable or the default value.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.urljoin">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">urljoin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.urljoin" title="Permalink to this definition">¶</a></dt>
-<dd><p>Joins given arguments into a url. Trailing but not leading slashes are stripped for each argument.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Joined url.</p>
-</dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.convert_to_folder_structure">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_folder_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.convert_to_folder_structure" title="Permalink to this definition">¶</a></dt>
+<dt class="sig sig-object py" id="pys3uploader.exceptions.convert_to_folder_structure">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">convert_to_folder_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.exceptions.convert_to_folder_structure" title="Permalink to this definition">¶</a></dt>
 <dd><p>Convert objects in a s3 buckets into a folder like representation.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
@@ -284,58 +267,31 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.convert_seconds">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">convert_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.convert_seconds" title="Permalink to this definition">¶</a></dt>
-<dd><p>Calculate years, months, days, hours, minutes, seconds, and milliseconds from given input.</p>
+<dl class="py exception">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix">
+<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidPrefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix" title="Permalink to this definition">¶</a></dt>
+<dd><p>Custom exception for invalid prefix value.</p>
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initialize an instance of <code class="docutils literal notranslate"><span class="pre">InvalidPrefix</span></code> object inherited from <code class="docutils literal notranslate"><span class="pre">S3Error</span></code></p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>seconds</strong> – Number of seconds to convert (supports float values).</p></li>
-<li><p><strong>n_elem</strong> – Number of elements required from the converted list.</p></li>
+<li><p><strong>prefix</strong> – Prefix to limit the objects.</p></li>
+<li><p><strong>bucket_name</strong> – Name of the S3 bucket.</p></li>
+<li><p><strong>available</strong> – Available objects in the s3.</p></li>
 </ul>
 </dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Returns a humanized string notion of the number of seconds.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
 </dl>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.format_nos">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">format_nos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></span><a class="headerlink" href="#pys3uploader.utils.format_nos" title="Permalink to this definition">¶</a></dt>
-<dd><p>Removes <code class="docutils literal notranslate"><span class="pre">.0</span></code> float values.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>input_</strong> – Strings or integers with <code class="docutils literal notranslate"><span class="pre">.0</span></code> at the end.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Int if found, else returns the received float value.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>int | float</p>
-</dd>
-</dl>
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix.format_error_message">
+<span class="sig-name descname"><span class="pre">format_error_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix.format_error_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the formatter error message as a string.</p>
 </dd></dl>
 
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.utils.size_converter">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">size_converter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">byte_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.size_converter" title="Permalink to this definition">¶</a></dt>
-<dd><p>Gets the current memory consumed and converts it to human friendly format.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>byte_size</strong> – Receives byte size as argument.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>Converted understandable size.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
 </dd></dl>
 
 </section>
@@ -456,70 +412,39 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dd></dl>
 
 </section>
-<section id="module-pys3uploader.exceptions">
-<span id="exceptions"></span><h1>Exceptions<a class="headerlink" href="#module-pys3uploader.exceptions" title="Permalink to this heading">¶</a></h1>
-<p>Module to store all the custom exceptions and formatters.</p>
-<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">S3Error</span>
+<section id="module-pys3uploader.progress">
+<span id="progress"></span><h1>Progress<a class="headerlink" href="#module-pys3uploader.progress" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pys3uploader.progress.ProgressPercentage">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.progress.</span></span><span class="sig-name descname"><span class="pre">ProgressPercentage</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">alive_bar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.progress.ProgressPercentage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tracks progress of a file upload to S3 and updates the alive_bar.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">ProgressPercentage</span>
 </pre></div>
 </div>
-<dl class="py exception">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.S3Error">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">S3Error</span></span><a class="headerlink" href="#pys3uploader.exceptions.S3Error" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom error for base exception to the PyS3Uploader module.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.BucketNotFound">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">BucketNotFound</span></span><a class="headerlink" href="#pys3uploader.exceptions.BucketNotFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom error for bucket not found.</p>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.NoObjectFound">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">NoObjectFound</span></span><a class="headerlink" href="#pys3uploader.exceptions.NoObjectFound" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom error for no objects found.</p>
-</dd></dl>
-
-<dl class="py function">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.convert_to_folder_structure">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">convert_to_folder_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.exceptions.convert_to_folder_structure" title="Permalink to this definition">¶</a></dt>
-<dd><p>Convert objects in a s3 buckets into a folder like representation.</p>
-<dl class="field-list simple">
-<dt class="field-odd">Parameters<span class="colon">:</span></dt>
-<dd class="field-odd"><p><strong>sequence</strong> – Takes either a mutable or immutable sequence as an argument.</p>
-</dd>
-<dt class="field-even">Returns<span class="colon">:</span></dt>
-<dd class="field-even"><p>String representation of the architecture.</p>
-</dd>
-<dt class="field-odd">Return type<span class="colon">:</span></dt>
-<dd class="field-odd"><p>str</p>
-</dd>
-</dl>
-</dd></dl>
-
-<dl class="py exception">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix">
-<em class="property"><span class="pre">exception</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.exceptions.</span></span><span class="sig-name descname"><span class="pre">InvalidPrefix</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix" title="Permalink to this definition">¶</a></dt>
-<dd><p>Custom exception for invalid prefix value.</p>
 <dl class="py method">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix.__init__">
-<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">prefix</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bucket_name</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">available</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix.__init__" title="Permalink to this definition">¶</a></dt>
-<dd><p>Initialize an instance of <code class="docutils literal notranslate"><span class="pre">InvalidPrefix</span></code> object inherited from <code class="docutils literal notranslate"><span class="pre">S3Error</span></code></p>
+<dt class="sig sig-object py" id="pys3uploader.progress.ProgressPercentage.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filename</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">bar</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">alive_bar</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.progress.ProgressPercentage.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Initializes the progress tracker.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Parameters<span class="colon">:</span></dt>
 <dd class="field-odd"><ul class="simple">
-<li><p><strong>prefix</strong> – Prefix to limit the objects.</p></li>
-<li><p><strong>bucket_name</strong> – Name of the S3 bucket.</p></li>
-<li><p><strong>available</strong> – Available objects in the s3.</p></li>
+<li><p><strong>filename</strong> – Name of the file being uploaded.</p></li>
+<li><p><strong>size</strong> – Total size of the file in bytes.</p></li>
+<li><p><strong>bar</strong> – alive_bar instance to update progress.</p></li>
 </ul>
 </dd>
 </dl>
 </dd></dl>
 
 <dl class="py method">
-<dt class="sig sig-object py" id="pys3uploader.exceptions.InvalidPrefix.format_error_message">
-<span class="sig-name descname"><span class="pre">format_error_message</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.exceptions.InvalidPrefix.format_error_message" title="Permalink to this definition">¶</a></dt>
-<dd><p>Returns the formatter error message as a string.</p>
+<dt class="sig sig-object py" id="pys3uploader.progress.ProgressPercentage.__call__">
+<span class="sig-name descname"><span class="pre">__call__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">bytes_amount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.progress.ProgressPercentage.__call__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Callback method to update progress.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>bytes_amount</strong> – Number of bytes transferred in the last chunk.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </dd></dl>
@@ -572,6 +497,119 @@ that start with a dot (hidden files).</p>
 </dd></dl>
 
 </section>
+<section id="module-pys3uploader.utils">
+<span id="utils"></span><h1>Utils<a class="headerlink" href="#module-pys3uploader.utils" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">UploadResults</span></span><a class="headerlink" href="#pys3uploader.utils.UploadResults" title="Permalink to this definition">¶</a></dt>
+<dd><p>Object to store results of S3 upload.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">UploadResults</span>
+</pre></div>
+</div>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults.success">
+<span class="sig-name descname"><span class="pre">success</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pys3uploader.utils.UploadResults.success" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.utils.UploadResults.failed">
+<span class="sig-name descname"><span class="pre">failed</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">0</span></em><a class="headerlink" href="#pys3uploader.utils.UploadResults.failed" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.getenv">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">getenv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.getenv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Returns the key-ed environment variable or the default value.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.urljoin">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">urljoin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.urljoin" title="Permalink to this definition">¶</a></dt>
+<dd><p>Joins given arguments into a url. Trailing but not leading slashes are stripped for each argument.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Joined url.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.convert_to_folder_structure">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">convert_to_folder_structure</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">sequence</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Set</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.convert_to_folder_structure" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert objects in a s3 buckets into a folder like representation.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>sequence</strong> – Takes either a mutable or immutable sequence as an argument.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>String representation of the architecture.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.convert_seconds">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">convert_seconds</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">seconds</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">n_elem</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">2</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.convert_seconds" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculate years, months, days, hours, minutes, seconds, and milliseconds from given input.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>seconds</strong> – Number of seconds to convert (supports float values).</p></li>
+<li><p><strong>n_elem</strong> – Number of elements required from the converted list.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns a humanized string notion of the number of seconds.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.format_nos">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">format_nos</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">input_</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></span><a class="headerlink" href="#pys3uploader.utils.format_nos" title="Permalink to this definition">¶</a></dt>
+<dd><p>Removes <code class="docutils literal notranslate"><span class="pre">.0</span></code> float values.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>input_</strong> – Strings or integers with <code class="docutils literal notranslate"><span class="pre">.0</span></code> at the end.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Int if found, else returns the received float value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>int | float</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="pys3uploader.utils.size_converter">
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">size_converter</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">byte_size</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span><span class="w"> </span><span class="p"><span class="pre">|</span></span><span class="w"> </span><span class="pre">float</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.size_converter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Gets the current memory consumed and converts it to human friendly format.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>byte_size</strong> – Receives byte size as argument.</p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Converted understandable size.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
+</dd></dl>
+
+</section>
 <section id="indices-and-tables">
 <h1>Indices and tables<a class="headerlink" href="#indices-and-tables" title="Permalink to this heading">¶</a></h1>
 <ul class="simple">
@@ -593,10 +631,11 @@ that start with a dot (hidden files).</p>
     <ul>
 <li><a class="reference internal" href="#">Welcome to PyS3Uploader’s documentation!</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.uploader">PyS3Uploader</a></li>
-<li><a class="reference internal" href="#module-pys3uploader.utils">Utils</a></li>
-<li><a class="reference internal" href="#module-pys3uploader.logger">Logger</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.exceptions">Exceptions</a></li>
+<li><a class="reference internal" href="#module-pys3uploader.logger">Logger</a></li>
+<li><a class="reference internal" href="#module-pys3uploader.progress">Progress</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.tree">Tree</a></li>
+<li><a class="reference internal" href="#module-pys3uploader.utils">Utils</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>
 </ul>
 
