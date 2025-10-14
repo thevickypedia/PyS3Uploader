@@ -15,23 +15,23 @@ Welcome to PyS3Uploader's documentation!
 PyS3Uploader
 ============
 
-.. automodule:: s3.uploader
+.. automodule:: pys3uploader.uploader
 
 Utils
 =====
-.. automodule:: s3.utils
+.. automodule:: pys3uploader.utils
 
 Logger
 ======
-.. automodule:: s3.logger
+.. automodule:: pys3uploader.logger
 
 Exceptions
 ==========
-.. automodule:: s3.exceptions
+.. automodule:: pys3uploader.exceptions
 
 Tree
 ====
-.. automodule:: s3.tree
+.. automodule:: pys3uploader.tree
 
 Indices and tables
 ==================

@@ -13,18 +13,18 @@ classifiers = [
     "Programming Language :: Python :: 3.11",
     "Topic :: Internet :: File Transfer Protocol (FTP)"
 ]
-keywords = ["s3"]
+keywords = ["pys3uploader"]
 requires-python = ">=3.11"
 
 [tool.setuptools]
-packages = ["s3"]
+packages = ["pys3uploader"]
 
 [build-system]
 requires = ["setuptools<77", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = { attr = "s3.version" }
+version = { attr = "pys3uploader.version" }
 dependencies = { file = "requirements.txt" }
 
 [project.optional-dependencies]

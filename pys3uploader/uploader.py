@@ -10,9 +10,9 @@ from botocore.config import Config
 from botocore.exceptions import ClientError
 from tqdm import tqdm
 
-from s3.exceptions import BucketNotFound
-from s3.logger import LogHandler, LogLevel, setup_logger
-from s3.utils import (
+from pys3uploader.exceptions import BucketNotFound
+from pys3uploader.logger import LogHandler, LogLevel, setup_logger
+from pys3uploader.utils import (
     RETRY_CONFIG,
     UploadResults,
     convert_seconds,

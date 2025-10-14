@@ -72,10 +72,10 @@
 <h2>Usage<a class="headerlink" href="#usage" title="Permalink to this heading">¶</a></h2>
 <section id="upload-objects-in-parallel">
 <h3>Upload objects in parallel<a class="headerlink" href="#upload-objects-in-parallel" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">s3</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pys3uploader</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">pys3uploader</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
         <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;BUCKET_NAME&quot;</span><span class="p">,</span>
         <span class="n">upload_dir</span><span class="o">=</span><span class="s2">&quot;FULL_PATH_TO_UPLOAD&quot;</span><span class="p">,</span>
         <span class="n">exclude_prefix</span><span class="o">=</span><span class="s2">&quot;PART_OF_UPLOAD_DIR_TO_EXCLUDE&quot;</span>
@@ -86,10 +86,10 @@
 </section>
 <section id="upload-objects-in-sequence">
 <h3>Upload objects in sequence<a class="headerlink" href="#upload-objects-in-sequence" title="Permalink to this heading">¶</a></h3>
-<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">s3</span>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span><span class="w"> </span><span class="nn">pys3uploader</span>
 
 <span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
-    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">s3</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
+    <span class="n">wrapper</span> <span class="o">=</span> <span class="n">pys3uploader</span><span class="o">.</span><span class="n">Uploader</span><span class="p">(</span>
         <span class="n">bucket_name</span><span class="o">=</span><span class="s2">&quot;BUCKET_NAME&quot;</span><span class="p">,</span>
         <span class="n">upload_dir</span><span class="o">=</span><span class="s2">&quot;FULL_PATH_TO_UPLOAD&quot;</span><span class="p">,</span>
         <span class="n">exclude_prefix</span><span class="o">=</span><span class="s2">&quot;PART_OF_UPLOAD_DIR_TO_EXCLUDE&quot;</span>
@@ -115,8 +115,8 @@
 <li><p><strong>file_exclusion</strong> - Sequence of files to exclude during upload. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>folder_exclusion</strong> - Sequence of directories to exclude during upload. Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code></p></li>
 <li><p><strong>logger</strong> - Bring your own custom pre-configured logger. Defaults to on-screen logging.</p></li>
-<li><p><strong>log_handler</strong> - Choose between <code class="docutils literal notranslate"><span class="pre">stdout</span></code> vs <code class="docutils literal notranslate"><span class="pre">file</span></code> logging. Defaults to <code class="docutils literal notranslate"><span class="pre">s3.LogHandler.stdout</span></code></p></li>
-<li><p><strong>log_level</strong> - Choose the logging level. Defaults to <code class="docutils literal notranslate"><span class="pre">s3.LogLevel.debug</span></code></p></li>
+<li><p><strong>log_handler</strong> - Choose between <code class="docutils literal notranslate"><span class="pre">stdout</span></code> vs <code class="docutils literal notranslate"><span class="pre">file</span></code> logging. Defaults to <code class="docutils literal notranslate"><span class="pre">pys3uploader.LogHandler.stdout</span></code></p></li>
+<li><p><strong>log_level</strong> - Choose the logging level. Defaults to <code class="docutils literal notranslate"><span class="pre">pys3uploader.LogLevel.debug</span></code></p></li>
 <li><p><strong>env_file</strong> – Path to a <code class="docutils literal notranslate"><span class="pre">.env</span></code> file for loading environment variables. Defaults to scanning the current directory.
 <br><br></p></li>
 <li><p><strong>region_name</strong> - AWS region name. Defaults to the env var <code class="docutils literal notranslate"><span class="pre">AWS_DEFAULT_REGION</span></code></p></li>

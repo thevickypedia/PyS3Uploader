@@ -36,10 +36,10 @@ pip install PyS3Uploader
 
 ##### Upload objects in parallel
 ```python
-import s3
+import pys3uploader
 
 if __name__ == '__main__':
-    wrapper = s3.Uploader(
+    wrapper = pys3uploader.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
         exclude_prefix="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
@@ -49,10 +49,10 @@ if __name__ == '__main__':
 
 ##### Upload objects in sequence
 ```python
-import s3
+import pys3uploader
 
 if __name__ == '__main__':
-    wrapper = s3.Uploader(
+    wrapper = pys3uploader.Uploader(
         bucket_name="BUCKET_NAME",
         upload_dir="FULL_PATH_TO_UPLOAD",
         exclude_prefix="PART_OF_UPLOAD_DIR_TO_EXCLUDE"
@@ -72,8 +72,8 @@ if __name__ == '__main__':
 - **file_exclusion** - Sequence of files to exclude during upload. Defaults to ``None``
 - **folder_exclusion** - Sequence of directories to exclude during upload. Defaults to ``None``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
-- **log_handler** - Choose between `stdout` vs `file` logging. Defaults to `s3.LogHandler.stdout`
-- **log_level** - Choose the logging level. Defaults to `s3.LogLevel.debug`
+- **log_handler** - Choose between `stdout` vs `file` logging. Defaults to `pys3uploader.LogHandler.stdout`
+- **log_level** - Choose the logging level. Defaults to `pys3uploader.LogLevel.debug`
 - **env_file** – Path to a `.env` file for loading environment variables. Defaults to scanning the current directory.
 <br><br>
 - **region_name** - AWS region name. Defaults to the env var `AWS_DEFAULT_REGION`
