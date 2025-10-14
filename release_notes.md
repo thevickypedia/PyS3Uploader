@@ -1,6 +1,14 @@
 Release Notes
 =============
 
+v0.2.4 (10/14/2025)
+-------------------
+- [f3f9081](https://github.com/thevickypedia/PyS3Uploader/commit/f3f90816cca5b1dec45bc7b750ed208d4709d3eb) chore: Release ``v0.2.4``
+- [60e8510](https://github.com/thevickypedia/PyS3Uploader/commit/60e8510d07eb9372444ba318b916369839cb24e0) feat: Include an option choose log handler and log level for default logging
+- [d13b522](https://github.com/thevickypedia/PyS3Uploader/commit/d13b52224b57a2ec02658579b9256465f0c2ced7) refactor: Log file size for each object that is being uploaded
+- [59c6e96](https://github.com/thevickypedia/PyS3Uploader/commit/59c6e96927b28fcad85a4c69fbcf51bb0edbc29a) refactor: Include debug logging to trace each object when uploaded
+- [3cf948c](https://github.com/thevickypedia/PyS3Uploader/commit/3cf948cac1c53726cd12ab77b6bb723b5cbf3d87) chore: Update release notes for v0.2.3
+
 v0.2.3 (10/13/2025)
 -------------------
 - [cdcbd89](https://github.com/thevickypedia/PyS3Uploader/commit/cdcbd89e374ca17a836911ec973f92590f6acb29) chore: Release ``v0.2.3``
