@@ -197,6 +197,8 @@ class Uploader:
             self.logger.info(
                 "S3 object %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
             )
+        else:
+            self.logger.debug("S3 object '%s' doesn't exist, uploading..", objectpath)
         return True
 
     def _uploader(self, filepath: str, objectpath: str) -> None:
