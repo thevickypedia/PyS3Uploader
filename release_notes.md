@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+v0.2.3 (10/13/2025)
+-------------------
+- [cdcbd89](https://github.com/thevickypedia/PyS3Uploader/commit/cdcbd89e374ca17a836911ec973f92590f6acb29) chore: Release ``v0.2.3``
+- [d9dfd06](https://github.com/thevickypedia/PyS3Uploader/commit/d9dfd06efc0769922e863e798a41b0fc6e017fda) refactor: Limit environment variables to AWS parameters only
+- [8c59a40](https://github.com/thevickypedia/PyS3Uploader/commit/8c59a408a313caa528dc45d8ca52df9d75950b2d) feat: Include a new feature to load environment variables from any dotenv file
+- [26d2c82](https://github.com/thevickypedia/PyS3Uploader/commit/26d2c82e937b724f423a8716e7e62c816e6dd59b) fix: Resolve ``filepath`` vs ``objectpath`` conflict in sequential uploads
+- [479af7a](https://github.com/thevickypedia/PyS3Uploader/commit/479af7aa00f231e9a7a2e0eb085f8f03492b001d) docs: Update runbook
+- [879492d](https://github.com/thevickypedia/PyS3Uploader/commit/879492d1885bbd4963d6325069eff7729a67358d) feat: Include an option to skip specific files or folders during upload
+- [405d6af](https://github.com/thevickypedia/PyS3Uploader/commit/405d6af87b5030424e127e3d0ac83d6d2b6eba58) refactor: Change ``exclude_path`` param to ``exclude_prefix``
+- [12ed0e7](https://github.com/thevickypedia/PyS3Uploader/commit/12ed0e757fb07610d2f4f603b194f416e86a282f) chore: Update release notes for v0.2.2
+
 v0.2.2 (10/13/2025)
 -------------------
 - [8892dfa](https://github.com/thevickypedia/PyS3Uploader/commit/8892dfa78bb7fdb489376c1499fbc39664a60607) chore: Release ``v0.2.2``
