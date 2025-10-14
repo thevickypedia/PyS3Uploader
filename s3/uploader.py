@@ -184,13 +184,13 @@ class Uploader:
         """
         if self.overwrite:
             return True
+        try:
+            file_size = os.path.getsize(filepath)
+        except (OSError, PermissionError) as error:
+            self.logger.error(error)
+            file_size = 0
         # Indicates that the object path already exists in S3
         if object_size := self.object_size_map.get(objectpath):
-            try:
-                file_size = os.path.getsize(filepath)
-            except (OSError, PermissionError) as error:
-                self.logger.error(error)
-                return True
             if object_size == file_size:
                 self.logger.info("S3 object %s exists, and size [%d] matches, skipping..", objectpath, object_size)
                 return False
@@ -198,7 +198,7 @@ class Uploader:
                 "S3 object %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
             )
         else:
-            self.logger.debug("S3 object '%s' doesn't exist, uploading..", objectpath)
+            self.logger.debug("S3 object '%s' of size [%d bytes] doesn't exist, uploading..", objectpath, file_size)
         return True
 
     def _uploader(self, filepath: str, objectpath: str) -> None:
