@@ -24,7 +24,7 @@ requires = ["setuptools<77", "wheel", "build"]
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools.dynamic]
-version = { attr = "pys3uploader.version" }
+version = { attr = "pys3uploader.version.version" }
 dependencies = { file = "requirements.txt" }
 
 [project.optional-dependencies]

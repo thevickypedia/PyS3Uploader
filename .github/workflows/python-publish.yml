@@ -6,7 +6,7 @@ on:
     branches:
       - main
     paths:
-      - "**/__init__.py"
+      - "**/version.py"
 
 jobs:
   pypi-publisher:
