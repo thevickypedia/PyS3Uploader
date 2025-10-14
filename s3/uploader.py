@@ -11,7 +11,7 @@ from botocore.exceptions import ClientError
 from tqdm import tqdm
 
 from s3.exceptions import BucketNotFound
-from s3.logger import default_logger
+from s3.logger import LogHandler, LogLevel, setup_logger
 from s3.utils import (
     RETRY_CONFIG,
     UploadResults,
@@ -45,6 +45,8 @@ class Uploader:
         aws_secret_access_key: str = None,
         retry_config: Config = RETRY_CONFIG,
         logger: logging.Logger = None,
+        log_handler: LogHandler = LogHandler.stdout,
+        log_level: LogLevel = LogLevel.debug,
         env_file: str = None,
     ):
         """Initiates all the necessary args and creates a boto3 session with retry logic.
@@ -63,6 +65,8 @@ class Uploader:
             aws_access_key_id: AWS access key ID.
             aws_secret_access_key: AWS secret access key.
             logger: Bring your own logger.
+            log_handler: Default log handler, can be ``file`` or ``stdout``.
+            log_level: Default log level, can be ``debug``, ``info``, ``warning`` or ``error``.
             env_file: Dotenv file (.env) filepath to load environment variables.
 
         See Also:
@@ -85,7 +89,7 @@ class Uploader:
                 If a filepath is provided, PyS3Uploader loads it directly or searches the root directory for the file.
                 If no filepath is provided, PyS3Uploader searches the current directory for a .env file.
         """
-        self.logger = logger or default_logger()
+        self.logger = logger or setup_logger(handler=LogHandler(log_handler), level=LogLevel(log_level))
         self.env_file = env_file or getenv("ENV_FILE", default=".env")
 
         # Check for env_file in current working directory

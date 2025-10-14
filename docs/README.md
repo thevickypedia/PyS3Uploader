@@ -72,6 +72,8 @@ if __name__ == '__main__':
 - **file_exclusion** - Sequence of files to exclude during upload. Defaults to ``None``
 - **folder_exclusion** - Sequence of directories to exclude during upload. Defaults to ``None``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
+- **log_handler** - Choose between `stdout` vs `file` logging. Defaults to `s3.LogHandler.stdout`
+- **log_level** - Choose the logging level. Defaults to `s3.LogLevel.debug`
 - **env_file** – Path to a `.env` file for loading environment variables. Defaults to scanning the current directory.
 <br><br>
 - **region_name** - AWS region name. Defaults to the env var `AWS_DEFAULT_REGION`
