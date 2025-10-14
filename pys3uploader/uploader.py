@@ -6,12 +6,13 @@ from typing import Dict, Iterable
 
 import boto3.resources.factory
 import dotenv
+from alive_progress import alive_bar
 from botocore.config import Config
 from botocore.exceptions import ClientError
-from tqdm import tqdm
 
 from pys3uploader.exceptions import BucketNotFound
 from pys3uploader.logger import LogHandler, LogLevel, setup_logger
+from pys3uploader.progress import ProgressPercentage
 from pys3uploader.utils import (
     RETRY_CONFIG,
     UploadResults,
@@ -220,7 +221,7 @@ class Uploader:
             )
         return True
 
-    def _uploader(self, filepath: str, objectpath: str) -> None:
+    def _uploader(self, filepath: str, objectpath: str, callback: ProgressPercentage) -> None:
         """Uploads the filepath to the specified S3 bucket.
 
         Args:
@@ -228,7 +229,7 @@ class Uploader:
             objectpath: Object path ref in S3.
         """
         if self._proceed_to_upload(filepath, objectpath):
-            self.bucket.upload_file(filepath, objectpath)
+            self.bucket.upload_file(filepath, objectpath, Callback=callback)
 
     def _get_files(self) -> Dict[str, str]:
         """Get a mapping for all the file path and object paths in upload directory.
@@ -272,19 +273,22 @@ class Uploader:
         """Initiates object upload in a traditional loop."""
         self.init()
         keys = self._get_files()
-        self.logger.debug(keys)
-        self.logger.info("%d files from '%s' will be uploaded to '%s'", len(keys), self.upload_dir, self.bucket_name)
-        self.logger.info("Initiating upload process.")
-        for filepath, objectpath in tqdm(
-            keys.items(), total=len(keys), unit="file", leave=True, desc=f"Uploading files from {self.upload_dir}"
-        ):
-            try:
-                self._uploader(filepath=filepath, objectpath=objectpath)
-                self.results.success += 1
-            except ClientError as error:
-                self.logger.error(error)
-                self.results.failed += 1
-        self.exit()
+        total_files = len(keys)
+
+        with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
+            for filepath, objectpath in keys.items():
+                filesize = os.path.getsize(filepath)
+                progress_callback = ProgressPercentage(os.path.basename(filepath), filesize, overall_bar)
+                try:
+                    self._uploader(filepath, objectpath, progress_callback)
+                    self.results.success += 1
+                except ClientError as error:
+                    self.logger.error(error)
+                    self.results.failed += 1
+                except KeyboardInterrupt:
+                    self.logger.warning("Upload interrupted by user")
+                    break
+                overall_bar()  # increment overall progress bar
 
     def run_in_parallel(self, max_workers: int = 5) -> None:
         """Initiates upload in multi-threading.
@@ -294,32 +298,31 @@ class Uploader:
         """
         self.init()
         keys = self._get_files()
-        self.logger.debug(keys)
+        total_files = len(keys)
+
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
-            len(keys),
+            total_files,
             self.upload_dir,
             self.bucket_name,
             max_workers,
         )
-        with ThreadPoolExecutor(max_workers=max_workers) as executor:
-            futures = [
-                executor.submit(self._uploader, **dict(filepath=filepath, objectpath=objectpath))
-                for filepath, objectpath in keys.items()
-            ]
-            for future in tqdm(
-                iterable=as_completed(futures),
-                total=len(futures),
-                desc=f"Uploading files to {self.bucket_name}",
-                unit="files",
-                leave=True,
-            ):
-                try:
-                    future.result()
-                    self.results.success += 1
-                except ClientError as error:
-                    self.logger.error(f"Upload failed: {error}")
-                    self.results.failed += 1
+        with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
+            with ThreadPoolExecutor(max_workers=max_workers) as executor:
+                futures = []
+                for filepath, objectpath in keys.items():
+                    filesize = os.path.getsize(filepath)
+                    progress_callback = ProgressPercentage(os.path.basename(filepath), filesize, overall_bar)
+                    futures.append(executor.submit(self._uploader, filepath, objectpath, callback=progress_callback))
+
+                for future in as_completed(futures):
+                    try:
+                        future.result()
+                        self.results.success += 1
+                    except ClientError as error:
+                        self.logger.error(f"Upload failed: {error}")
+                        self.results.failed += 1
+                    overall_bar()  # Increment overall bar after each upload finishes
         self.exit()
 
     def get_bucket_structure(self) -> str:
