@@ -1,6 +1,6 @@
 import threading
 
-from alive_progress.core.progress import __AliveBarHandle
+from alive_progress import alive_bar
 
 
 class ProgressPercentage:
@@ -10,7 +10,7 @@ class ProgressPercentage:
 
     """
 
-    def __init__(self, filename: str, size: int, bar: __AliveBarHandle):
+    def __init__(self, filename: str, size: int, bar: alive_bar):
         """Initializes the progress tracker.
 
         Args:
