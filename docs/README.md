@@ -72,6 +72,7 @@ if __name__ == '__main__':
 - **file_exclusion** - Sequence of files to exclude during upload. Defaults to ``None``
 - **folder_exclusion** - Sequence of directories to exclude during upload. Defaults to ``None``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
+- **env_file** – Path to a `.env` file for loading environment variables. Defaults to scanning the current directory.
 <br><br>
 - **region_name** - AWS region name. Defaults to the env var `AWS_DEFAULT_REGION`
 - **profile_name** - AWS profile name. Defaults to the env var `PROFILE_NAME`

@@ -107,7 +107,7 @@ class Uploader:
                 self.logger.debug("No .env files found to load")
 
         self.session = boto3.Session(
-            profile_name=profile_name or getenv("PROFILE_NAME"),
+            profile_name=profile_name or getenv("PROFILE_NAME", "AWS_PROFILE_NAME"),
             region_name=region_name or getenv("AWS_DEFAULT_REGION"),
             aws_access_key_id=aws_access_key_id or getenv("AWS_ACCESS_KEY_ID"),
             aws_secret_access_key=aws_secret_access_key or getenv("AWS_SECRET_ACCESS_KEY"),
@@ -115,7 +115,7 @@ class Uploader:
         self.s3 = self.session.resource(service_name="s3", config=retry_config)
 
         self.bucket_name = bucket_name
-        self.upload_dir = upload_dir or getenv("UPLOAD_DIR", "UPLOAD_SOURCE")
+        self.upload_dir = upload_dir
         self.s3_prefix = s3_prefix
         self.exclude_prefix = exclude_prefix
         self.skip_dot_files = skip_dot_files
