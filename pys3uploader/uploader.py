@@ -18,6 +18,7 @@ from pys3uploader.utils import (
     convert_seconds,
     convert_to_folder_structure,
     getenv,
+    size_converter,
     urljoin,
 )
 
@@ -196,13 +197,27 @@ class Uploader:
         # Indicates that the object path already exists in S3
         if object_size := self.object_size_map.get(objectpath):
             if object_size == file_size:
-                self.logger.info("S3 object %s exists, and size [%d] matches, skipping..", objectpath, object_size)
+                self.logger.info(
+                    "S3 object %s exists, and size [%d bytes / %s] matches, skipping..",
+                    objectpath,
+                    object_size,
+                    size_converter(object_size),
+                )
                 return False
             self.logger.info(
-                "S3 object %s exists, but size mismatch. Local: [%d], S3: [%d]", objectpath, file_size, object_size
+                "S3 object %s exists, but size mismatch. Local: [%d bytes / %s], S3: [%d bytes / %s]",
+                objectpath,
+                file_size,
+                object_size,
+                size_converter(object_size),
             )
         else:
-            self.logger.debug("S3 object '%s' of size [%d bytes] doesn't exist, uploading..", objectpath, file_size)
+            self.logger.debug(
+                "S3 object '%s' of size [%d bytes / %s] doesn't exist, uploading..",
+                objectpath,
+                file_size,
+                size_converter(file_size),
+            )
         return True
 
     def _uploader(self, filepath: str, objectpath: str) -> None:
