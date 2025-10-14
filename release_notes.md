@@ -1,6 +1,12 @@
 Release Notes
 =============
 
+v0.3.0 (10/14/2025)
+-------------------
+- [b47a57d](https://github.com/thevickypedia/PyS3Uploader/commit/b47a57ddf4a85f77eda6f1daf25495252c19c575) chore: Release ``v0.3.0``
+- [3a383bb](https://github.com/thevickypedia/PyS3Uploader/commit/3a383bb2975044dd384ecd0c7762da0499f31235) refactor: Rename base module to ``pys3uploader``
+- [07686d4](https://github.com/thevickypedia/PyS3Uploader/commit/07686d4c18632b2c868de1a45216e0c543d70216) chore: Update release notes for v0.2.4
+
 v0.2.4 (10/14/2025)
 -------------------
 - [f3f9081](https://github.com/thevickypedia/PyS3Uploader/commit/f3f90816cca5b1dec45bc7b750ed208d4709d3eb) chore: Release ``v0.2.4``
