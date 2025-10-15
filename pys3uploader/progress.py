@@ -33,5 +33,7 @@ class ProgressPercentage:
         with self._lock:
             self._seen_so_far += bytes_amount
             percent = (self._seen_so_far / self._size) * 100
-            # Update alive_bar text with current file and % progress
-            self._bar.text(f" || {self._filename} [{percent:.1f}%]")
+            bar_len = 20
+            filled = int(bar_len * percent / 100)
+            bar_str = '█' * filled + '.' * (bar_len - filled)
+            self._bar.text(f" || {self._filename} [{bar_str}] {percent:.0f}%")
