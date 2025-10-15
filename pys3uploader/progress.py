@@ -35,5 +35,5 @@ class ProgressPercentage:
             percent = (self._seen_so_far / self._size) * 100
             bar_len = 20
             filled = int(bar_len * percent / 100)
-            bar_str = '█' * filled + '.' * (bar_len - filled)
+            bar_str = "█" * filled + "." * (bar_len - filled)
             self._bar.text(f" || {self._filename} [{bar_str}] {percent:.0f}%")

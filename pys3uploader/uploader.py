@@ -177,6 +177,22 @@ class Uploader:
         )
         self.logger.info("Run time: %s", convert_seconds(time.time() - self.start))
 
+    def filesize(self, filepath: str) -> int:
+        """Gets the file size of a given filepath.
+
+        Args:
+            filepath: Full path of the file.
+
+        Returns:
+            int:
+            Returns the file size in bytes.
+        """
+        try:
+            return os.path.getsize(filepath)
+        except (OSError, PermissionError) as error:
+            self.logger.error(error)
+            return 0
+
     def _proceed_to_upload(self, filepath: str, objectpath: str) -> bool:
         """Compares file size if the object already exists in S3.
 
@@ -190,11 +206,7 @@ class Uploader:
         """
         if self.overwrite:
             return True
-        try:
-            file_size = os.path.getsize(filepath)
-        except (OSError, PermissionError) as error:
-            self.logger.error(error)
-            file_size = 0
+        file_size = self.filesize(filepath)
         # Indicates that the object path already exists in S3
         if object_size := self.object_size_map.get(objectpath):
             if object_size == file_size:
@@ -277,8 +289,9 @@ class Uploader:
 
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
             for filepath, objectpath in keys.items():
-                filesize = os.path.getsize(filepath)
-                progress_callback = ProgressPercentage(os.path.basename(filepath), filesize, overall_bar)
+                progress_callback = ProgressPercentage(
+                    filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
+                )
                 try:
                     self._uploader(filepath, objectpath, progress_callback)
                     self.results.success += 1
@@ -311,8 +324,9 @@ class Uploader:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = []
                 for filepath, objectpath in keys.items():
-                    filesize = os.path.getsize(filepath)
-                    progress_callback = ProgressPercentage(os.path.basename(filepath), filesize, overall_bar)
+                    progress_callback = ProgressPercentage(
+                        filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
+                    )
                     futures.append(executor.submit(self._uploader, filepath, objectpath, callback=progress_callback))
 
                 for future in as_completed(futures):
