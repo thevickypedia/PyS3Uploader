@@ -1,6 +1,16 @@
 Release Notes
 =============
 
+v0.3.2 (10/14/2025)
+-------------------
+- [9bc2568](https://github.com/thevickypedia/PyS3Uploader/commit/9bc2568460b6a16606a547ffcd2f7e651684c2e8) chore: Release ``v0.3.2``
+- [ffc2049](https://github.com/thevickypedia/PyS3Uploader/commit/ffc20490deaede91911c45a914f5698d4b1e7e23) perf: Get file size safely with a common exception handler
+- [f504637](https://github.com/thevickypedia/PyS3Uploader/commit/f5046370c7b9d26faa461d9ce6a36c34b373f89e) style: Update styling for progress bar for chunked uploads
+- [990fbac](https://github.com/thevickypedia/PyS3Uploader/commit/990fbacd1b89e447437c2897a0092bda93c2e64d) docs: Include docstrings for ``__call__`` in runbook
+- [1b426ef](https://github.com/thevickypedia/PyS3Uploader/commit/1b426efcdca6cb9524dfae6c5472e58751b8975c) fix: Remove ``__AliveBarHandle`` on type hint in ``ProgressPercentage`` object
+- [7db0184](https://github.com/thevickypedia/PyS3Uploader/commit/7db01840d01c3dc3627e8dc8786be6d19c84ea68) style: Replace ``tqdm`` with ``alive-progress`` to track upload status based on chunks for each file
+- [f538670](https://github.com/thevickypedia/PyS3Uploader/commit/f5386703a3266d3b3a63f03399ecb78a17fa42a2) chore: Update release notes for v0.3.1
+
 v0.3.1 (10/14/2025)
 -------------------
 - [ef2d886](https://github.com/thevickypedia/PyS3Uploader/commit/ef2d88653cc94dd8e8fe979e803b968b88c0de73) chore: Release ``v0.3.1``
