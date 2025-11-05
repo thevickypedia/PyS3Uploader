@@ -28,7 +28,16 @@ class UploadResults(dict):
 
 
 def getenv(*args, default: str = None) -> str:
-    """Returns the key-ed environment variable or the default value."""
+    """Returns the key-ed environment variable or the default value.
+
+    Args:
+        args: Environment variable keys to search for.
+        default: Default value to return if no environment variable is found.
+
+    Returns:
+        str:
+        Environment variable value or the default value.
+    """
     for key in args:
         if value := os.environ.get(key.upper()) or os.environ.get(key.lower()):
             return value
@@ -37,6 +46,9 @@ def getenv(*args, default: str = None) -> str:
 
 def urljoin(*args) -> str:
     """Joins given arguments into a url. Trailing but not leading slashes are stripped for each argument.
+
+    Args:
+        args: Parts of the url to join.
 
     Returns:
         str:
@@ -68,6 +80,10 @@ def convert_to_folder_structure(sequence: Set[str]) -> str:
         Args:
             structure: Structure of folder objects as key-value pairs.
             indent: Required indentation for the ASCII.
+
+        Returns:
+            str:
+            String representation of the folder structure.
         """
         result = ""
         for i, (key, value) in enumerate(structure.items()):

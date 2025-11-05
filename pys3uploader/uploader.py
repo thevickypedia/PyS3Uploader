@@ -2,7 +2,7 @@ import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from typing import Dict, Iterable
+from typing import Dict, Iterable, NoReturn
 
 import boto3.resources.factory
 import dotenv
@@ -138,7 +138,7 @@ class Uploader:
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = []
         self.object_size_map: Dict[str, int] = {}
 
-    def init(self) -> None:
+    def init(self) -> None | NoReturn:
         """Instantiates the bucket instance.
 
         Raises:
@@ -239,6 +239,7 @@ class Uploader:
         Args:
             filepath: Filepath to upload.
             objectpath: Object path ref in S3.
+            callback: ProgressPercentage callback to track upload progress.
         """
         if self._proceed_to_upload(filepath, objectpath):
             self.bucket.upload_file(filepath, objectpath, Callback=callback)

@@ -120,7 +120,7 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pys3uploader.uploader.Uploader.init">
-<span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader.init" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">init</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Union</span><span class="p"><span class="pre">[</span></span><span class="pre">None</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">NoReturn</span><span class="p"><span class="pre">]</span></span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader.init" title="Permalink to this definition">¶</a></dt>
 <dd><p>Instantiates the bucket instance.</p>
 <dl class="field-list simple">
 <dt class="field-odd">Raises<span class="colon">:</span></dt>
@@ -184,6 +184,7 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 <dd class="field-odd"><ul class="simple">
 <li><p><strong>filepath</strong> – Filepath to upload.</p></li>
 <li><p><strong>objectpath</strong> – Object path ref in S3.</p></li>
+<li><p><strong>callback</strong> – ProgressPercentage callback to track upload progress.</p></li>
 </ul>
 </dd>
 </dl>
@@ -416,14 +417,20 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 
 <dl class="py function">
 <dt class="sig sig-object py" id="pys3uploader.logger.setup_logger">
-<span class="sig-prename descclassname"><span class="pre">pys3uploader.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pys3uploader.logger.LogHandler" title="pys3uploader.logger.LogHandler"><span class="pre">LogHandler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pys3uploader.logger.LogLevel" title="pys3uploader.logger.LogLevel"><span class="pre">LogLevel</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.logger.setup_logger" title="Permalink to this definition">¶</a></dt>
+<span class="sig-prename descclassname"><span class="pre">pys3uploader.logger.</span></span><span class="sig-name descname"><span class="pre">setup_logger</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">handler</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pys3uploader.logger.LogHandler" title="pys3uploader.logger.LogHandler"><span class="pre">LogHandler</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">level</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="#pys3uploader.logger.LogLevel" title="pys3uploader.logger.LogLevel"><span class="pre">LogLevel</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">Logger</span></span></span><a class="headerlink" href="#pys3uploader.logger.setup_logger" title="Permalink to this definition">¶</a></dt>
 <dd><p>Creates a default logger with debug mode enabled.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Returns an instance of the <code class="docutils literal notranslate"><span class="pre">Logger</span></code> object.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>handler</strong> – Logging handler to use.</p></li>
+<li><p><strong>level</strong> – Logging level to use.</p></li>
+</ul>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>logging.Logger</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Returns an instance of the <code class="docutils literal notranslate"><span class="pre">Logger</span></code> object.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>logging.Logger</p>
 </dd>
 </dl>
 </dd></dl>
@@ -539,6 +546,20 @@ that start with a dot (hidden files).</p>
 <dt class="sig sig-object py" id="pys3uploader.utils.getenv">
 <span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">getenv</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">default</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.getenv" title="Permalink to this definition">¶</a></dt>
 <dd><p>Returns the key-ed environment variable or the default value.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>args</strong> – Environment variable keys to search for.</p></li>
+<li><p><strong>default</strong> – Default value to return if no environment variable is found.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Environment variable value or the default value.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py function">
@@ -546,11 +567,14 @@ that start with a dot (hidden files).</p>
 <span class="sig-prename descclassname"><span class="pre">pys3uploader.utils.</span></span><span class="sig-name descname"><span class="pre">urljoin</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="o"><span class="pre">*</span></span><span class="n"><span class="pre">args</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">str</span></span></span><a class="headerlink" href="#pys3uploader.utils.urljoin" title="Permalink to this definition">¶</a></dt>
 <dd><p>Joins given arguments into a url. Trailing but not leading slashes are stripped for each argument.</p>
 <dl class="field-list simple">
-<dt class="field-odd">Returns<span class="colon">:</span></dt>
-<dd class="field-odd"><p>Joined url.</p>
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>args</strong> – Parts of the url to join.</p>
 </dd>
-<dt class="field-even">Return type<span class="colon">:</span></dt>
-<dd class="field-even"><p>str</p>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Joined url.</p>
+</dd>
+<dt class="field-odd">Return type<span class="colon">:</span></dt>
+<dd class="field-odd"><p>str</p>
 </dd>
 </dl>
 </dd></dl>

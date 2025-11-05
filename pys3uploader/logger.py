@@ -83,8 +83,12 @@ def default_format() -> logging.Formatter:
     )
 
 
-def setup_logger(handler: LogHandler, level: LogLevel):
+def setup_logger(handler: LogHandler, level: LogLevel) -> logging.Logger:
     """Creates a default logger with debug mode enabled.
+
+    Args:
+        handler: Logging handler to use.
+        level: Logging level to use.
 
     Returns:
         logging.Logger:
