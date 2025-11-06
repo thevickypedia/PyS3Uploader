@@ -27,6 +27,43 @@
 # PyS3Uploader
 Python module to upload an entire directory to an S3 bucket.
 
+<details>
+<summary><strong>Bucket Policy Required</strong></summary>
+
+```json
+{
+    "Version": "2012-10-17",
+    "Statement": [
+        {
+            "Sid": "ListBucketsForExistenceCheck",
+            "Effect": "Allow",
+            "Action": "s3:ListAllMyBuckets",
+            "Resource": "*"
+        },
+        {
+            "Sid": "ListAndUploadToSpecificBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:ListBucket",
+                "s3:ListBucketMultipartUploads"
+            ],
+            "Resource": "arn:aws:s3:::bucketname"
+        },
+        {
+            "Sid": "UploadObjectsToBucket",
+            "Effect": "Allow",
+            "Action": [
+                "s3:PutObject",
+                "s3:AbortMultipartUpload",
+                "s3:ListMultipartUploadParts"
+            ],
+            "Resource": "arn:aws:s3:::bucketname/*"
+        }
+    ]
+}
+```
+</details>
+
 ### Installation
 ```shell
 pip install PyS3Uploader

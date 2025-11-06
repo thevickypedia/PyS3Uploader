@@ -158,7 +158,7 @@ class Uploader:
         except AssertionError:
             raise ValueError(f"\n\n\tPath not found: {self.upload_dir}")
         if not self.bucket_name:
-            raise ValueError(f"\n\n\tCannot proceed without a bucket name.")
+            raise ValueError("\n\n\tCannot proceed without a bucket name.")
         buckets = [bucket.name for bucket in self.s3.buckets.all()]
         if self.bucket_name not in buckets:
             raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found.\n\tAvailable: {buckets}")
