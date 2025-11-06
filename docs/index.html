@@ -157,8 +157,16 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 
 <dl class="py method">
 <dt class="sig sig-object py" id="pys3uploader.uploader.Uploader.size_it">
-<span class="sig-name descname"><span class="pre">size_it</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader.size_it" title="Permalink to this definition">¶</a></dt>
+<span class="sig-name descname"><span class="pre">size_it</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">upload_files</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">files_local</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader.size_it" title="Permalink to this definition">¶</a></dt>
 <dd><p>Calculates and logs the total size of files in S3 and local.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>upload_files</strong> – Mapping of filepaths and object paths.</p></li>
+<li><p><strong>files_local</strong> – Total number of files to be uploaded.</p></li>
+</ul>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py method">
