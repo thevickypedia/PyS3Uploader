@@ -137,6 +137,7 @@ class Uploader:
         # noinspection PyUnresolvedReferences
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = []
         self.object_size_map: Dict[str, int] = {}
+        self.upload_files: Dict[str, str] = {}
 
     def init(self) -> None | NoReturn:
         """Instantiates the bucket instance.
@@ -156,18 +157,20 @@ class Uploader:
             assert os.path.exists(self.upload_dir)
         except AssertionError:
             raise ValueError(f"\n\n\tPath not found: {self.upload_dir}")
-        buckets = [bucket.name for bucket in self.s3.buckets.all()]
         if not self.bucket_name:
-            raise ValueError(f"\n\n\tCannot proceed without a bucket name.\n\tAvailable: {buckets}")
-        _account_id, _alias = self.session.resource(service_name="iam").CurrentUser().arn.split("/")
+            raise ValueError(f"\n\n\tCannot proceed without a bucket name.")
+        buckets = [bucket.name for bucket in self.s3.buckets.all()]
         if self.bucket_name not in buckets:
-            raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found in {_alias} account.\n\tAvailable: {buckets}")
+            raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found.\n\tAvailable: {buckets}")
         self.upload_dir = os.path.abspath(self.upload_dir)
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = self.s3.Bucket(self.bucket_name)
         # noinspection PyUnresolvedReferences
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = [obj for obj in self.bucket.objects.all()]
         self.object_size_map = {obj.key: obj.size for obj in self.bucket_objects}
+
+        self.upload_files = self._get_files()
+        self.size_it()
 
     def exit(self) -> None:
         """Exits after printing results, and run time."""
@@ -193,19 +196,17 @@ class Uploader:
             self.logger.error(error)
             return 0
 
-    def size_it(self, object_keys: Dict[str, str], total_uploads: int) -> None:
-        """Calculates and logs the total size of files in S3 and local.
-
-        Args:
-            object_keys: Mapping of filepaths and object paths.
-            total_uploads: Total number of files to be uploaded.
-        """
+    def size_it(self) -> None:
+        """Calculates and logs the total size of files in S3 and local."""
         files_in_s3 = len(self.object_size_map)
+        files_local = len(self.upload_files)
+
         total_size_s3 = sum(self.object_size_map.values())
-        total_size_local = sum([os.path.getsize(key) for key in object_keys])
+        total_size_local = sum([os.path.getsize(key) for key in self.upload_files])
+
         self.logger.info("Files in S3: [#%d]: %s (%d bytes)", files_in_s3, size_converter(total_size_s3), total_size_s3)
         self.logger.info(
-            "Files local: [#%d]: %s (%d bytes)", total_uploads, size_converter(total_size_local), total_size_local
+            "Files local: [#%d]: %s (%d bytes)", files_local, size_converter(total_size_local), total_size_local
         )
 
     def _proceed_to_upload(self, filepath: str, objectpath: str) -> bool:
@@ -300,12 +301,10 @@ class Uploader:
     def run(self) -> None:
         """Initiates object upload in a traditional loop."""
         self.init()
-        keys = self._get_files()
-        total_files = len(keys)
-        self.size_it(keys, total_files)
+        total_files = len(self.upload_files)
 
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
-            for filepath, objectpath in keys.items():
+            for filepath, objectpath in self.upload_files.items():
                 progress_callback = ProgressPercentage(
                     filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                 )
@@ -328,9 +327,7 @@ class Uploader:
             max_workers: Number of maximum threads to use.
         """
         self.init()
-        keys = self._get_files()
-        total_files = len(keys)
-        self.size_it(keys, total_files)
+        total_files = len(self.upload_files)
 
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
@@ -342,7 +339,7 @@ class Uploader:
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = []
-                for filepath, objectpath in keys.items():
+                for filepath, objectpath in self.upload_files.items():
                     progress_callback = ProgressPercentage(
                         filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                     )
