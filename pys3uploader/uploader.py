@@ -193,6 +193,21 @@ class Uploader:
             self.logger.error(error)
             return 0
 
+    def size_it(self, object_keys: Dict[str, str], total_uploads: int) -> None:
+        """Calculates and logs the total size of files in S3 and local.
+
+        Args:
+            object_keys: Mapping of filepaths and object paths.
+            total_uploads: Total number of files to be uploaded.
+        """
+        files_in_s3 = len(self.object_size_map)
+        total_size_s3 = sum(self.object_size_map.values())
+        total_size_local = sum([os.path.getsize(key) for key in object_keys])
+        self.logger.info("Files in S3: [#%d]: %s (%d bytes)", files_in_s3, size_converter(total_size_s3), total_size_s3)
+        self.logger.info(
+            "Files local: [#%d]: %s (%d bytes)", total_uploads, size_converter(total_size_local), total_size_local
+        )
+
     def _proceed_to_upload(self, filepath: str, objectpath: str) -> bool:
         """Compares file size if the object already exists in S3.
 
@@ -287,6 +302,7 @@ class Uploader:
         self.init()
         keys = self._get_files()
         total_files = len(keys)
+        self.size_it(keys, total_files)
 
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
             for filepath, objectpath in keys.items():
@@ -303,6 +319,7 @@ class Uploader:
                     self.logger.warning("Upload interrupted by user")
                     break
                 overall_bar()  # increment overall progress bar
+        self.exit()
 
     def run_in_parallel(self, max_workers: int = 5) -> None:
         """Initiates upload in multi-threading.
@@ -313,6 +330,7 @@ class Uploader:
         self.init()
         keys = self._get_files()
         total_files = len(keys)
+        self.size_it(keys, total_files)
 
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",

@@ -156,6 +156,20 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dd></dl>
 
 <dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.uploader.Uploader.size_it">
+<span class="sig-name descname"><span class="pre">size_it</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">object_keys</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">str</span><span class="p"><span class="pre">]</span></span></span></em>, <em class="sig-param"><span class="n"><span class="pre">total_uploads</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader.size_it" title="Permalink to this definition">¶</a></dt>
+<dd><p>Calculates and logs the total size of files in S3 and local.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>object_keys</strong> – Mapping of filepaths and object paths.</p></li>
+<li><p><strong>total_uploads</strong> – Total number of files to be uploaded.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
 <dt class="sig sig-object py" id="pys3uploader.uploader.Uploader._proceed_to_upload">
 <span class="sig-name descname"><span class="pre">_proceed_to_upload</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">filepath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objectpath</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">bool</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader._proceed_to_upload" title="Permalink to this definition">¶</a></dt>
 <dd><p>Compares file size if the object already exists in S3.</p>
