@@ -153,7 +153,9 @@ class Uploader:
         self.timer = RepeatedTimer(
             function=self.metadata_uploader,
             interval=metadata_upload_interval or int(getenv("METADATA_UPLOAD_INTERVAL", default="300")),
+            logger=self.logger,
         )
+        self.alive_bar_kwargs = dict(title="Progress", bar="smooth", spinner=None, enrich_print=False)
 
     def init(self) -> None | NoReturn:
         """Instantiates the bucket instance.
@@ -342,7 +344,7 @@ class Uploader:
             self.upload_dir,
             self.bucket_name,
         )
-        with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
+        with alive_bar(total_files, **self.alive_bar_kwargs) as overall_bar:
             for filepath, objectpath in self.upload_files.items():
                 progress_callback = ProgressPercentage(
                     filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
@@ -380,7 +382,7 @@ class Uploader:
             self.bucket_name,
             max_workers,
         )
-        with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
+        with alive_bar(total_files, **self.alive_bar_kwargs) as overall_bar:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = {}
                 for filepath, objectpath in self.upload_files.items():
