@@ -45,6 +45,8 @@ class Uploader:
         overwrite: bool = False,
         file_exclusion: Iterable[str] = None,
         folder_exclusion: Iterable[str] = None,
+        metadata_upload_interval: int = None,
+        metadata_filename: str = None,
         region_name: str = None,
         profile_name: str = None,
         aws_access_key_id: str = None,
@@ -145,8 +147,10 @@ class Uploader:
         self.upload_files: Dict[str, str] = {}
         self.file_size_map: Dict[str, int] = {}
 
+        self.metadata_filename = metadata_filename or getenv("METADATA_FILENAME", default="METADATA.json")
         self.timer = RepeatedTimer(
-            function=self.metadata_uploader, interval=int(getenv("METADATA_UPLOAD_INTERVAL", default="300"))
+            function=self.metadata_uploader,
+            interval=metadata_upload_interval or int(getenv("METADATA_UPLOAD_INTERVAL", default="300")),
         )
 
     def init(self) -> None | NoReturn:
@@ -395,7 +399,6 @@ class Uploader:
 
     def metadata_uploader(self) -> None:
         """Metadata uploader."""
-        filename = objectpath = getenv("METADATA_FILENAME", default="METADATA.json")
         self.load_bucket_state()
         success = self.results.success + self.results.skipped
         objects_uploaded = len(success)
@@ -414,11 +417,11 @@ class Uploader:
         )
         self.logger.debug("\n" + json.dumps(metadata.__dict__, indent=2) + "\n")
         self.logger.debug("Uploading metadata to S3")
-        filepath = os.path.join(os.getcwd(), filename)
+        filepath = os.path.join(os.getcwd(), self.metadata_filename)
         with open(filepath, "w") as file:
             json.dump(metadata.__dict__, file, indent=2)
             file.flush()
-        self.bucket.upload_file(filepath, objectpath)
+        self.bucket.upload_file(filepath, self.metadata_filename)
 
     def get_bucket_structure(self) -> str:
         """Gets all the objects in an S3 bucket and forms it into a hierarchical folder like representation.
