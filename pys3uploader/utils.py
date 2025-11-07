@@ -1,6 +1,6 @@
 import math
 import os
-from typing import Dict, Set
+from typing import Dict, List, Set
 
 from botocore.config import Config
 
@@ -23,8 +23,9 @@ class UploadResults(dict):
 
     """
 
-    success: int = 0
-    failed: int = 0
+    success: List[str] = []
+    failed: List[str] = []
+    skipped: List[str] = []
 
 
 def getenv(*args, default: str = None) -> str:

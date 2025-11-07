@@ -1,7 +1,9 @@
+import json
 import logging
 import os
 import time
 from concurrent.futures import ThreadPoolExecutor, as_completed
+from datetime import UTC, datetime
 from typing import Dict, Iterable, NoReturn
 
 import boto3.resources.factory
@@ -12,7 +14,9 @@ from botocore.exceptions import ClientError
 
 from pys3uploader.exceptions import BucketNotFound
 from pys3uploader.logger import LogHandler, LogLevel, setup_logger
+from pys3uploader.metadata import Metadata
 from pys3uploader.progress import ProgressPercentage
+from pys3uploader.timer import RepeatedTimer
 from pys3uploader.utils import (
     RETRY_CONFIG,
     UploadResults,
@@ -138,6 +142,13 @@ class Uploader:
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = []
         self.object_size_map: Dict[str, int] = {}
 
+        self.upload_files: Dict[str, str] = {}
+        self.file_size_map: Dict[str, int] = {}
+
+        self.timer = RepeatedTimer(
+            function=self.metadata_uploader, interval=int(getenv("METADATA_UPLOAD_INTERVAL", default="300"))
+        )
+
     def init(self) -> None | NoReturn:
         """Instantiates the bucket instance.
 
@@ -161,18 +172,33 @@ class Uploader:
         if (buckets := [bucket.name for bucket in self.s3.buckets.all()]) and self.bucket_name not in buckets:
             raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found.\n\tAvailable: {buckets}")
         self.upload_dir = os.path.abspath(self.upload_dir)
+        self.load_bucket_state()
+
+    def load_bucket_state(self) -> None:
+        """Loads the bucket's current state."""
         # noinspection PyUnresolvedReferences
         self.bucket: boto3.resources.factory.s3.Bucket = self.s3.Bucket(self.bucket_name)
         # noinspection PyUnresolvedReferences
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = [obj for obj in self.bucket.objects.all()]
         self.object_size_map = {obj.key: obj.size for obj in self.bucket_objects}
 
+    def load_local_state(self):
+        """Loads the local file queue."""
+        self.upload_files = self._get_files()
+        self.file_size_map = {file: self.filesize(file) for file in self.upload_files}
+
     def exit(self) -> None:
         """Exits after printing results, and run time."""
-        total = self.results.success + self.results.failed
+        success = len(self.results.success)
+        skipped = len(self.results.skipped)
+        failed = len(self.results.failed)
+        total = success + failed
         self.logger.info(
-            "Total number of uploads: %d, success: %d, failed: %d", total, self.results.success, self.results.failed
+            "Total number of uploads: %d, skipped: %d, success: %d, failed: %d", total, skipped, success, failed
         )
+        # Stop the timer and upload the final state as metadata file
+        self.timer.stop()
+        self.metadata_uploader()
         self.logger.info("Run time: %s", convert_seconds(time.time() - self.start))
 
     def filesize(self, filepath: str) -> int:
@@ -191,17 +217,13 @@ class Uploader:
             self.logger.error(error)
             return 0
 
-    def size_it(self, upload_files: Dict[str, str], files_local: int) -> None:
-        """Calculates and logs the total size of files in S3 and local.
-
-        Args:
-            upload_files: Mapping of filepaths and object paths.
-            files_local: Total number of files to be uploaded.
-        """
+    def size_it(self) -> None:
+        """Calculates and logs the total size of files in S3 and local."""
         files_in_s3 = len(self.object_size_map)
+        files_local = len(self.upload_files)
 
         total_size_s3 = sum(self.object_size_map.values())
-        total_size_local = sum([os.path.getsize(key) for key in upload_files])
+        total_size_local = sum(self.file_size_map.values())
 
         self.logger.info("Files in S3: [#%d]: %s (%d bytes)", files_in_s3, size_converter(total_size_s3), total_size_s3)
         self.logger.info(
@@ -231,6 +253,7 @@ class Uploader:
                     object_size,
                     size_converter(object_size),
                 )
+                self.results.skipped.append(filepath)
                 return False
             self.logger.info(
                 "S3 object %s exists, but size mismatch. Local: [%d bytes / %s], S3: [%d bytes / %s]",
@@ -299,22 +322,31 @@ class Uploader:
 
     def run(self) -> None:
         """Initiates object upload in a traditional loop."""
+        # Verify and initiate bucket state
         self.init()
-        upload_files = self._get_files()
-        total_files = len(upload_files)
-        self.size_it(upload_files, total_files)
+        # Verify and initiate local state
+        self.load_local_state()
+        self.size_it()
+        self.timer.start()
+        total_files = len(self.upload_files)
 
+        self.logger.info(
+            "%d files from '%s' will be uploaded to '%s' sequentially",
+            total_files,
+            self.upload_dir,
+            self.bucket_name,
+        )
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
-            for filepath, objectpath in upload_files.items():
+            for filepath, objectpath in self.upload_files.items():
                 progress_callback = ProgressPercentage(
                     filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                 )
                 try:
                     self._uploader(filepath, objectpath, progress_callback)
-                    self.results.success += 1
+                    self.results.success.append(filepath)
                 except ClientError as error:
-                    self.logger.error(error)
-                    self.results.failed += 1
+                    self.logger.error("Upload failed: %s", error)
+                    self.results.failed.append(filepath)
                 except KeyboardInterrupt:
                     self.logger.warning("Upload interrupted by user")
                     break
@@ -327,10 +359,13 @@ class Uploader:
         Args:
             max_workers: Number of maximum threads to use.
         """
+        # Verify and initiate bucket state
         self.init()
-        upload_files = self._get_files()
-        total_files = len(upload_files)
-        self.size_it(upload_files, total_files)
+        # Verify and initiate local state
+        self.load_local_state()
+        self.size_it()
+        self.timer.start()
+        total_files = len(self.upload_files)
 
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
@@ -342,7 +377,7 @@ class Uploader:
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = []
-                for filepath, objectpath in upload_files.items():
+                for filepath, objectpath in self.upload_files.items():
                     progress_callback = ProgressPercentage(
                         filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                     )
@@ -351,12 +386,39 @@ class Uploader:
                 for future in as_completed(futures):
                     try:
                         future.result()
-                        self.results.success += 1
+                        self.results.success.append(filepath)
                     except ClientError as error:
-                        self.logger.error(f"Upload failed: {error}")
-                        self.results.failed += 1
+                        self.logger.error("Upload failed: %s", error)
+                        self.results.failed.append(filepath)
                     overall_bar()  # Increment overall bar after each upload finishes
         self.exit()
+
+    def metadata_uploader(self) -> None:
+        """Metadata uploader."""
+        filename = objectpath = getenv("METADATA_FILENAME", default="METADATA.json")
+        self.load_bucket_state()
+        success = self.results.success + self.results.skipped
+        objects_uploaded = len(success)
+        size_uploaded = sum((self.filesize(file) for file in success))
+
+        pending_files = self.upload_files.keys() - success
+        objects_pending = len(pending_files)
+        size_pending = sum((self.filesize(file) for file in pending_files))
+
+        metadata = Metadata(
+            timestamp=datetime.now(tz=UTC).strftime("%A %B %d, %Y %H:%M:%S"),
+            objects_uploaded=objects_uploaded,
+            objects_pending=objects_pending,
+            size_uploaded=size_converter(size_uploaded),
+            size_pending=size_converter(size_pending),
+        )
+        self.logger.debug("\n" + json.dumps(metadata.__dict__, indent=2) + "\n")
+        self.logger.debug("Uploading metadata to S3")
+        filepath = os.path.join(os.getcwd(), filename)
+        with open(filepath, "w") as file:
+            json.dump(metadata.__dict__, file, indent=2)
+            file.flush()
+        self.bucket.upload_file(filepath, objectpath)
 
     def get_bucket_structure(self) -> str:
         """Gets all the objects in an S3 bucket and forms it into a hierarchical folder like representation.
