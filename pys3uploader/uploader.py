@@ -380,14 +380,16 @@ class Uploader:
         )
         with alive_bar(total_files, title="Progress", bar="smooth", spinner="dots") as overall_bar:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
-                futures = []
+                futures = {}
                 for filepath, objectpath in self.upload_files.items():
                     progress_callback = ProgressPercentage(
                         filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                     )
-                    futures.append(executor.submit(self._uploader, filepath, objectpath, callback=progress_callback))
+                    future = executor.submit(self._uploader, filepath, objectpath, progress_callback)
+                    futures[future] = filepath
 
                 for future in as_completed(futures):
+                    filepath = futures[future]
                     try:
                         future.result()
                         self.results.success.append(filepath)
@@ -400,13 +402,13 @@ class Uploader:
     def metadata_uploader(self) -> None:
         """Metadata uploader."""
         self.load_bucket_state()
-        success = self.results.success + self.results.skipped
+        success = list(set(self.results.success + self.results.skipped))
         objects_uploaded = len(success)
-        size_uploaded = sum((self.filesize(file) for file in success))
+        size_uploaded = sum(self.filesize(file) for file in success)
 
-        pending_files = self.upload_files.keys() - success
+        pending_files = set(self.upload_files.keys()) - set(success)
         objects_pending = len(pending_files)
-        size_pending = sum((self.filesize(file) for file in pending_files))
+        size_pending = sum(self.filesize(file) for file in pending_files)
 
         metadata = Metadata(
             timestamp=datetime.now(tz=UTC).strftime("%A %B %d, %Y %H:%M:%S"),
