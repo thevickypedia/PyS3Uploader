@@ -108,6 +108,8 @@ if __name__ == '__main__':
 - **overwrite** - Boolean flag to overwrite files present in S3. Defaults to ``False``
 - **file_exclusion** - Sequence of files to exclude during upload. Defaults to ``None``
 - **folder_exclusion** - Sequence of directories to exclude during upload. Defaults to ``None``
+- **metadata_upload_interval** - Interval in seconds to upload metadata file. Defaults to ``300``
+- **metadata_filename** - Metadata filename to upload periodically. Defaults to ``METADATA.json``
 - **logger** - Bring your own custom pre-configured logger. Defaults to on-screen logging.
 - **log_handler** - Choose between `stdout` vs `file` logging. Defaults to `pys3uploader.LogHandler.stdout`
 - **log_level** - Choose the logging level. Defaults to `pys3uploader.LogLevel.debug`

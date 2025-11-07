@@ -68,6 +68,8 @@ class Uploader:
             overwrite: Boolean flag to overwrite files in S3.
             file_exclusion: Sequence of files to exclude during upload.
             folder_exclusion: Sequence of directories to exclude during upload.
+            metadata_upload_interval: Interval in seconds to upload metadata file.
+            metadata_filename: Metadata filename to upload periodically.
             region_name: Name of the AWS region.
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
