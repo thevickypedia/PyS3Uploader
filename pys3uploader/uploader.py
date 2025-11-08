@@ -74,6 +74,7 @@ class Uploader:
             profile_name: AWS profile name.
             aws_access_key_id: AWS access key ID.
             aws_secret_access_key: AWS secret access key.
+            retry_config: Boto3 retry configuration.
             logger: Bring your own logger.
             log_handler: Default log handler, can be ``file`` or ``stdout``.
             log_level: Default log level, can be ``debug``, ``info``, ``warning`` or ``error``.

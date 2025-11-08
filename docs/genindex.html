@@ -53,6 +53,7 @@
  | <a href="#L"><strong>L</strong></a>
  | <a href="#M"><strong>M</strong></a>
  | <a href="#N"><strong>N</strong></a>
+ | <a href="#O"><strong>O</strong></a>
  | <a href="#P"><strong>P</strong></a>
  | <a href="#R"><strong>R</strong></a>
  | <a href="#S"><strong>S</strong></a>
@@ -69,7 +70,11 @@
       <li><a href="index.html#pys3uploader.exceptions.InvalidPrefix.__init__">__init__() (pys3uploader.exceptions.InvalidPrefix method)</a>
 
       <ul>
+        <li><a href="index.html#pys3uploader.metadata.Metadata.__init__">(pys3uploader.metadata.Metadata method)</a>
+</li>
         <li><a href="index.html#pys3uploader.progress.ProgressPercentage.__init__">(pys3uploader.progress.ProgressPercentage method)</a>
+</li>
+        <li><a href="index.html#pys3uploader.timer.RepeatedTimer.__init__">(pys3uploader.timer.RepeatedTimer method)</a>
 </li>
         <li><a href="index.html#pys3uploader.tree.Tree.__init__">(pys3uploader.tree.Tree method)</a>
 </li>
@@ -82,7 +87,11 @@
 </li>
       <li><a href="index.html#pys3uploader.logger.LogLevel._missing_">_missing_() (pys3uploader.logger.LogLevel class method)</a>
 </li>
+      <li><a href="index.html#pys3uploader.uploader.Uploader._preflight">_preflight() (pys3uploader.uploader.Uploader method)</a>
+</li>
       <li><a href="index.html#pys3uploader.uploader.Uploader._proceed_to_upload">_proceed_to_upload() (pys3uploader.uploader.Uploader method)</a>
+</li>
+      <li><a href="index.html#pys3uploader.timer.RepeatedTimer._run">_run() (pys3uploader.timer.RepeatedTimer method)</a>
 </li>
       <li><a href="index.html#pys3uploader.uploader.Uploader._uploader">_uploader() (pys3uploader.uploader.Uploader method)</a>
 </li>
@@ -202,6 +211,8 @@
 <h2 id="M">M</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pys3uploader.metadata.Metadata">Metadata (class in pys3uploader.metadata)</a>
+</li>
       <li><a href="index.html#pys3uploader.uploader.Uploader.metadata_uploader">metadata_uploader() (pys3uploader.uploader.Uploader method)</a>
 </li>
       <li>
@@ -212,7 +223,11 @@
 </li>
         <li><a href="index.html#module-pys3uploader.logger">pys3uploader.logger</a>
 </li>
+        <li><a href="index.html#module-pys3uploader.metadata">pys3uploader.metadata</a>
+</li>
         <li><a href="index.html#module-pys3uploader.progress">pys3uploader.progress</a>
+</li>
+        <li><a href="index.html#module-pys3uploader.timer">pys3uploader.timer</a>
 </li>
         <li><a href="index.html#module-pys3uploader.tree">pys3uploader.tree</a>
 </li>
@@ -228,6 +243,18 @@
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="index.html#pys3uploader.exceptions.NoObjectFound">NoObjectFound</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="O">O</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pys3uploader.metadata.Metadata.objects_pending">objects_pending (pys3uploader.metadata.Metadata attribute)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pys3uploader.metadata.Metadata.objects_uploaded">objects_uploaded (pys3uploader.metadata.Metadata attribute)</a>
 </li>
   </ul></td>
 </tr></table>
@@ -254,6 +281,13 @@
 </li>
       </ul></li>
       <li>
+    pys3uploader.metadata
+
+      <ul>
+        <li><a href="index.html#module-pys3uploader.metadata">module</a>
+</li>
+      </ul></li>
+      <li>
     pys3uploader.progress
 
       <ul>
@@ -262,6 +296,13 @@
       </ul></li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    pys3uploader.timer
+
+      <ul>
+        <li><a href="index.html#module-pys3uploader.timer">module</a>
+</li>
+      </ul></li>
       <li>
     pys3uploader.tree
 
@@ -289,10 +330,12 @@
 <h2 id="R">R</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#pys3uploader.uploader.Uploader.run">run() (pys3uploader.uploader.Uploader method)</a>
+      <li><a href="index.html#pys3uploader.timer.RepeatedTimer">RepeatedTimer (class in pys3uploader.timer)</a>
 </li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pys3uploader.uploader.Uploader.run">run() (pys3uploader.uploader.Uploader method)</a>
+</li>
       <li><a href="index.html#pys3uploader.uploader.Uploader.run_in_parallel">run_in_parallel() (pys3uploader.uploader.Uploader method)</a>
 </li>
   </ul></td>
@@ -309,13 +352,21 @@
 </li>
       <li><a href="index.html#pys3uploader.utils.size_converter">size_converter() (in module pys3uploader.utils)</a>
 </li>
+      <li><a href="index.html#pys3uploader.uploader.Uploader.size_it">size_it() (pys3uploader.uploader.Uploader method)</a>
+</li>
+      <li><a href="index.html#pys3uploader.metadata.Metadata.size_pending">size_pending (pys3uploader.metadata.Metadata attribute)</a>
+</li>
   </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
-      <li><a href="index.html#pys3uploader.uploader.Uploader.size_it">size_it() (pys3uploader.uploader.Uploader method)</a>
+      <li><a href="index.html#pys3uploader.metadata.Metadata.size_uploaded">size_uploaded (pys3uploader.metadata.Metadata attribute)</a>
 </li>
       <li><a href="index.html#pys3uploader.utils.UploadResults.skipped">skipped (pys3uploader.utils.UploadResults attribute)</a>
 </li>
+      <li><a href="index.html#pys3uploader.timer.RepeatedTimer.start">start() (pys3uploader.timer.RepeatedTimer method)</a>
+</li>
       <li><a href="index.html#pys3uploader.logger.LogHandler.stdout">stdout (pys3uploader.logger.LogHandler attribute)</a>
+</li>
+      <li><a href="index.html#pys3uploader.timer.RepeatedTimer.stop">stop() (pys3uploader.timer.RepeatedTimer method)</a>
 </li>
       <li><a href="index.html#pys3uploader.logger.stream_handler">stream_handler() (in module pys3uploader.logger)</a>
 </li>
@@ -326,6 +377,10 @@
 
 <h2 id="T">T</h2>
 <table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="index.html#pys3uploader.metadata.Metadata.timestamp">timestamp (pys3uploader.metadata.Metadata attribute)</a>
+</li>
+  </ul></td>
   <td style="width: 33%; vertical-align: top;"><ul>
       <li><a href="index.html#pys3uploader.tree.Tree">Tree (class in pys3uploader.tree)</a>
 </li>

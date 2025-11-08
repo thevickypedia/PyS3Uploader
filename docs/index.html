@@ -4,7 +4,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
     <title>Welcome to PyS3Uploader’s documentation! &#8212; PyS3Uploader  documentation</title>
     <link rel="stylesheet" type="text/css" href="_static/pygments.css" />
@@ -92,6 +92,7 @@
 <li><p><strong>profile_name</strong> – AWS profile name.</p></li>
 <li><p><strong>aws_access_key_id</strong> – AWS access key ID.</p></li>
 <li><p><strong>aws_secret_access_key</strong> – AWS secret access key.</p></li>
+<li><p><strong>retry_config</strong> – Boto3 retry configuration.</p></li>
 <li><p><strong>logger</strong> – Bring your own logger.</p></li>
 <li><p><strong>log_handler</strong> – Default log handler, can be <code class="docutils literal notranslate"><span class="pre">file</span></code> or <code class="docutils literal notranslate"><span class="pre">stdout</span></code>.</p></li>
 <li><p><strong>log_level</strong> – Default log level, can be <code class="docutils literal notranslate"><span class="pre">debug</span></code>, <code class="docutils literal notranslate"><span class="pre">info</span></code>, <code class="docutils literal notranslate"><span class="pre">warning</span></code> or <code class="docutils literal notranslate"><span class="pre">error</span></code>.</p></li>
@@ -220,6 +221,20 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dd>
 <dt class="field-even">Return type<span class="colon">:</span></dt>
 <dd class="field-even"><p>Dict[str, str]</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.uploader.Uploader._preflight">
+<span class="sig-name descname"><span class="pre">_preflight</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">int</span></span></span><a class="headerlink" href="#pys3uploader.uploader.Uploader._preflight" title="Permalink to this definition">¶</a></dt>
+<dd><p>Preflight checks and tasks before upload.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns<span class="colon">:</span></dt>
+<dd class="field-odd"><p>Returns the total number of files to be uploaded.</p>
+</dd>
+<dt class="field-even">Return type<span class="colon">:</span></dt>
+<dd class="field-even"><p>int</p>
 </dd>
 </dl>
 </dd></dl>
@@ -462,6 +477,45 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 </dd></dl>
 
 </section>
+<section id="module-pys3uploader.metadata">
+<span id="metadata"></span><h1>Metadata<a class="headerlink" href="#module-pys3uploader.metadata" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.metadata.</span></span><span class="sig-name descname"><span class="pre">Metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects_uploaded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects_pending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_uploaded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_pending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.metadata.Metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Dataclass for metadata information.</p>
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.timestamp">
+<span class="sig-name descname"><span class="pre">timestamp</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pys3uploader.metadata.Metadata.timestamp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.objects_uploaded">
+<span class="sig-name descname"><span class="pre">objects_uploaded</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pys3uploader.metadata.Metadata.objects_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.objects_pending">
+<span class="sig-name descname"><span class="pre">objects_pending</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">int</span></em><a class="headerlink" href="#pys3uploader.metadata.Metadata.objects_pending" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.size_uploaded">
+<span class="sig-name descname"><span class="pre">size_uploaded</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pys3uploader.metadata.Metadata.size_uploaded" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.size_pending">
+<span class="sig-name descname"><span class="pre">size_pending</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="pre">str</span></em><a class="headerlink" href="#pys3uploader.metadata.Metadata.size_pending" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.metadata.Metadata.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timestamp</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects_uploaded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">objects_pending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_uploaded</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">size_pending</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">None</span></span></span><a class="headerlink" href="#pys3uploader.metadata.Metadata.__init__" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</section>
 <section id="module-pys3uploader.progress">
 <span id="progress"></span><h1>Progress<a class="headerlink" href="#module-pys3uploader.progress" title="Permalink to this heading">¶</a></h1>
 <dl class="py class">
@@ -495,6 +549,53 @@ If no filepath is provided, PyS3Uploader searches the current directory for a .e
 <dd class="field-odd"><p><strong>bytes_amount</strong> – Number of bytes transferred in the last chunk.</p>
 </dd>
 </dl>
+</dd></dl>
+
+</dd></dl>
+
+</section>
+<section id="module-pys3uploader.timer">
+<span id="repeated-timer"></span><h1>Repeated Timer<a class="headerlink" href="#module-pys3uploader.timer" title="Permalink to this heading">¶</a></h1>
+<dl class="py class">
+<dt class="sig sig-object py" id="pys3uploader.timer.RepeatedTimer">
+<em class="property"><span class="pre">class</span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">pys3uploader.timer.</span></span><span class="sig-name descname"><span class="pre">RepeatedTimer</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.timer.RepeatedTimer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Instantiates RepeatedTimer object to kick off the threading.Timer object with custom intervals.</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">RepeatedTimer</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.timer.RepeatedTimer.__init__">
+<span class="sig-name descname"><span class="pre">__init__</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">interval</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">function</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Callable</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">args</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Tuple</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">kwargs</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Dict</span><span class="p"><span class="pre">[</span></span><span class="pre">str</span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="pre">Any</span><span class="p"><span class="pre">]</span></span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">logger</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Logger</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.timer.RepeatedTimer.__init__" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeats the <code class="docutils literal notranslate"><span class="pre">Timer</span></code> object from threading.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>interval</strong> – Interval in seconds.</p></li>
+<li><p><strong>function</strong> – Function to trigger with intervals.</p></li>
+<li><p><strong>args</strong> – Arguments for the function.</p></li>
+<li><p><strong>kwargs</strong> – Keyword arguments for the function.</p></li>
+<li><p><strong>logger</strong> – Logger instance.</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.timer.RepeatedTimer._run">
+<span class="sig-name descname"><span class="pre">_run</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.timer.RepeatedTimer._run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Triggers the target function.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.timer.RepeatedTimer.start">
+<span class="sig-name descname"><span class="pre">start</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.timer.RepeatedTimer.start" title="Permalink to this definition">¶</a></dt>
+<dd><p>Trigger target function if timer isn’t running already.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt class="sig sig-object py" id="pys3uploader.timer.RepeatedTimer.stop">
+<span class="sig-name descname"><span class="pre">stop</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">timeout</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">int</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">3</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#pys3uploader.timer.RepeatedTimer.stop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Stop the timer and cancel all futures.</p>
 </dd></dl>
 
 </dd></dl>
@@ -705,7 +806,9 @@ that start with a dot (hidden files).</p>
 <li><a class="reference internal" href="#module-pys3uploader.uploader">PyS3Uploader</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.exceptions">Exceptions</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.logger">Logger</a></li>
+<li><a class="reference internal" href="#module-pys3uploader.metadata">Metadata</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.progress">Progress</a></li>
+<li><a class="reference internal" href="#module-pys3uploader.timer">Repeated Timer</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.tree">Tree</a></li>
 <li><a class="reference internal" href="#module-pys3uploader.utils">Utils</a></li>
 <li><a class="reference internal" href="#indices-and-tables">Indices and tables</a></li>

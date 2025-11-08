@@ -25,9 +25,17 @@ Logger
 ======
 .. automodule:: pys3uploader.logger
 
+Metadata
+========
+.. automodule:: pys3uploader.metadata
+
 Progress
 ========
 .. automodule:: pys3uploader.progress
+
+Repeated Timer
+==============
+.. automodule:: pys3uploader.timer
 
 Tree
 ====
