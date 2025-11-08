@@ -1,6 +1,25 @@
 Release Notes
 =============
 
+v0.4.0 (11/08/2025)
+-------------------
+- [f63c447](https://github.com/thevickypedia/PyS3Uploader/commit/f63c447b58ebde270e1fcb30b477a1ffef22f9f5) chore: Release ``v0.4.0``
+- [3c6edcd](https://github.com/thevickypedia/PyS3Uploader/commit/3c6edcd61af57af62d7f95b98c6ebfb42f9e665f) docs: Update runbook
+- [65770cc](https://github.com/thevickypedia/PyS3Uploader/commit/65770cc2bc08b313872b865f5a10d50fb63087e5) refactor: Move common upload functionalities to a dedicated func
+- [9a37dab](https://github.com/thevickypedia/PyS3Uploader/commit/9a37dab4360c5d31965d0431630a5960783d7ea0) perf: Fix intermittent frozen progress bar
+- [a3fc123](https://github.com/thevickypedia/PyS3Uploader/commit/a3fc1234b69b545be1ac825cda836232ca068146) perf: Replace ``RepeatedTimer`` class with a non-blocking, daemon-thread version
+- [6e4a2bb](https://github.com/thevickypedia/PyS3Uploader/commit/6e4a2bb5e499462081c5c810329a5c75cd56b643) docs: Update ``README.md`` and runbook
+- [453ae83](https://github.com/thevickypedia/PyS3Uploader/commit/453ae831790fa0be91f84f6f69095b84c081d1d5) fix: Bug fix for inflated upload and pending size in metadata output
+- [d2ebd83](https://github.com/thevickypedia/PyS3Uploader/commit/d2ebd83f2a97efd855ff3ee2f289472c4477e684) refactor: Take metadata filename and upload interval as object parameters
+- [f333cb0](https://github.com/thevickypedia/PyS3Uploader/commit/f333cb0da7df81d54b43b66bb3112fd9e92fd806) feat: Include a new feature to periodically write a metadata JSON file to S3 with upload stats
+- [7f17a7c](https://github.com/thevickypedia/PyS3Uploader/commit/7f17a7c1566cdebef0030ec82f1ddf717d4f8818) revert: Rollback moving upload queue and sizing info to upload initializer
+- [ab5e718](https://github.com/thevickypedia/PyS3Uploader/commit/ab5e718a2bdb5c3f9950826ba91120c93260a743) refactor: GET available buckets before verifying target bucket's availability
+- [e6fa71c](https://github.com/thevickypedia/PyS3Uploader/commit/e6fa71c81200a96c0a22d5d3c034ed7ca1a82888) docs: Add a least-privilege S3 policy in README.md
+- [03dde8a](https://github.com/thevickypedia/PyS3Uploader/commit/03dde8ad447e140fb434faaac7c7b44a4c4d1340) refactor: Move upload queue and sizing info to upload initializer
+- [dfef7b7](https://github.com/thevickypedia/PyS3Uploader/commit/dfef7b7db0201ed6554e44fbe6150dd31ffe6bd6) feat: Log file size on S3 and local before initiating upload process
+- [0cbb253](https://github.com/thevickypedia/PyS3Uploader/commit/0cbb2531b8c2b3996209c896cd1169820a783558) docs: Update runbook
+- [f0d3cbd](https://github.com/thevickypedia/PyS3Uploader/commit/f0d3cbd01699bdfe26d898a6bec948ca2b89f91a) chore: Update release notes for v0.3.2
+
 v0.3.2 (10/14/2025)
 -------------------
 - [9bc2568](https://github.com/thevickypedia/PyS3Uploader/commit/9bc2568460b6a16606a547ffcd2f7e651684c2e8) chore: Release ``v0.3.2``
