@@ -328,15 +328,29 @@ class Uploader:
                 files_to_upload[file_path] = object_path
         return files_to_upload
 
-    def run(self) -> None:
-        """Initiates object upload in a traditional loop."""
+    def _preflight(self) -> int:
+        """Preflight checks and tasks before upload.
+
+        Returns:
+            int:
+            Returns the total number of files to be uploaded.
+        """
         # Verify and initiate bucket state
         self.init()
         # Verify and initiate local state
         self.load_local_state()
+        # Make sure there are files to upload
+        assert self.upload_files, "\n\n\tNo files found to upload.\n"
+        # Log size details
         self.size_it()
+        # Start metadata upload timer
         self.timer.start()
-        total_files = len(self.upload_files)
+        # Return total files to upload
+        return len(self.upload_files)
+
+    def run(self) -> None:
+        """Initiates object upload in a traditional loop."""
+        total_files = self._preflight()
 
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' sequentially",
@@ -367,13 +381,7 @@ class Uploader:
         Args:
             max_workers: Number of maximum threads to use.
         """
-        # Verify and initiate bucket state
-        self.init()
-        # Verify and initiate local state
-        self.load_local_state()
-        self.size_it()
-        self.timer.start()
-        total_files = len(self.upload_files)
+        total_files = self._preflight()
 
         self.logger.info(
             "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
