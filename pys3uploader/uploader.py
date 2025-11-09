@@ -268,6 +268,7 @@ class Uploader:
                 "S3 object %s exists, but size mismatch. Local: [%d bytes / %s], S3: [%d bytes / %s]",
                 objectpath,
                 file_size,
+                size_converter(file_size),
                 object_size,
                 size_converter(object_size),
             )
