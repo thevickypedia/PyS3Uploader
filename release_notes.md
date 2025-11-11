@@ -1,6 +1,12 @@
 Release Notes
 =============
 
+v0.4.1 (11/10/2025)
+-------------------
+- [9dd1d55](https://github.com/thevickypedia/PyS3Uploader/commit/9dd1d55e17c61f0d9c960b4f2649cc5b80cc54d5) chore: Release ``v0.4.1``
+- [c69a333](https://github.com/thevickypedia/PyS3Uploader/commit/c69a33329df0abdf7f538caead801eb48b2c6c01) fix: Bug fix for # of arguments in logger during a size mismatch
+- [d962b79](https://github.com/thevickypedia/PyS3Uploader/commit/d962b7973501c211d365315ef494b30bcd219c27) chore: Update release notes for v0.4.0
+
 v0.4.0 (11/08/2025)
 -------------------
 - [f63c447](https://github.com/thevickypedia/PyS3Uploader/commit/f63c447b58ebde270e1fcb30b477a1ffef22f9f5) chore: Release ``v0.4.0``
