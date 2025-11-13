@@ -10,7 +10,6 @@ import boto3.resources.factory
 import dotenv
 from alive_progress import alive_bar
 from botocore.config import Config
-from botocore.exceptions import ClientError
 
 from pys3uploader.exceptions import BucketNotFound
 from pys3uploader.logger import LogHandler, LogLevel, setup_logger
@@ -368,7 +367,7 @@ class Uploader:
                 try:
                     self._uploader(filepath, objectpath, progress_callback)
                     self.results.success.append(filepath)
-                except ClientError as error:
+                except Exception as error:
                     self.logger.error("Upload failed: %s", error)
                     self.results.failed.append(filepath)
                 except KeyboardInterrupt:
@@ -407,9 +406,12 @@ class Uploader:
                     try:
                         future.result()
                         self.results.success.append(filepath)
-                    except ClientError as error:
+                    except Exception as error:
                         self.logger.error("Upload failed: %s", error)
                         self.results.failed.append(filepath)
+                    except KeyboardInterrupt:
+                        self.logger.warning("Upload interrupted by user")
+                        break
                     overall_bar()  # Increment overall bar after each upload finishes
         self.exit()
 
