@@ -251,7 +251,7 @@ class Uploader:
         """
         if self.overwrite:
             return True
-        file_size = self.filesize(filepath)
+        file_size = self.file_size_map[filepath]
         # Indicates that the object path already exists in S3
         if object_size := self.object_size_map.get(objectpath):
             if object_size == file_size:
