@@ -422,16 +422,23 @@ class Uploader:
         objects_uploaded = len(success)
         size_uploaded = sum(self.filesize(file) for file in success)
 
-        pending_files = set(self.upload_files.keys()) - set(success)
+        pending_files = set(self.upload_files.keys()) - set(success) - set(self.results.failed)
         objects_pending = len(pending_files)
         size_pending = sum(self.filesize(file) for file in pending_files)
+
+        objects_failed = len(self.results.failed)
+        size_failed = sum(self.filesize(file) for file in self.results.failed)
 
         metadata = Metadata(
             timestamp=datetime.now(tz=UTC).strftime("%A %B %d, %Y %H:%M:%S"),
             objects_uploaded=objects_uploaded,
             objects_pending=objects_pending,
+            objects_failed=objects_failed,
             size_uploaded=size_converter(size_uploaded),
             size_pending=size_converter(size_pending),
+            size_failed=size_converter(size_failed),
+            success=success,
+            failed=self.results.failed,
         )
         self.logger.debug("\n" + json.dumps(metadata.__dict__, indent=2) + "\n")
         self.logger.debug("Uploading metadata to S3")
