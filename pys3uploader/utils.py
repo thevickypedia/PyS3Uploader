@@ -10,9 +10,8 @@ RETRY_CONFIG: Config = Config(
         "mode": "adaptive",  # Adaptive retry mode with jitter
         "total_max_attempts": 20,  # Max retries across all requests
     },
-    # Adding custom timeouts here:
-    connect_timeout=5,  # 5 seconds for establishing a connection
-    read_timeout=30,  # 30 seconds to wait for a response from the server
+    connect_timeout=60,  # 60 seconds for establishing a connection
+    read_timeout=300,  # 5 minutes to wait for a response from the server
 )
 
 
