@@ -418,7 +418,9 @@ class Uploader:
     def metadata_uploader(self) -> None:
         """Metadata uploader."""
         self.load_bucket_state()
-        success = list(set(self.results.success + self.results.skipped))
+        success = {
+            filepath: self.upload_files[filepath] for filepath in list(set(self.results.success + self.results.skipped))
+        }
         objects_uploaded = len(success)
         size_uploaded = sum(self.filesize(file) for file in success)
 
@@ -426,7 +428,8 @@ class Uploader:
         objects_pending = len(pending_files)
         size_pending = sum(self.filesize(file) for file in pending_files)
 
-        objects_failed = len(self.results.failed)
+        failed = {filepath: self.upload_files[filepath] for filepath in self.results.failed}
+        objects_failed = len(failed)
         size_failed = sum(self.filesize(file) for file in self.results.failed)
 
         metadata = Metadata(
@@ -438,7 +441,7 @@ class Uploader:
             size_pending=size_converter(size_pending),
             size_failed=size_converter(size_failed),
             success=success,
-            failed=self.results.failed,
+            failed=failed,
         )
         self.logger.debug("\n" + json.dumps(metadata.__dict__, indent=2) + "\n")
         self.logger.debug("Uploading metadata to S3")
