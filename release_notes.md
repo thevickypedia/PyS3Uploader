@@ -1,6 +1,17 @@
 Release Notes
 =============
 
+v0.4.2 (11/16/2025)
+-------------------
+- [937a2c7](https://github.com/thevickypedia/PyS3Uploader/commit/937a2c7e184a81407966783abf45a266e09b3117) chore: Release ``v0.4.2``
+- [731c7fc](https://github.com/thevickypedia/PyS3Uploader/commit/731c7fcd689cc774a58108c5f63e015d21bf11b1) perf: Store full mapping of filepath and objectpath in metadata file
+- [dc82f54](https://github.com/thevickypedia/PyS3Uploader/commit/dc82f54c772a561344400a05adb41831845121a5) docs: Update runbook
+- [7dacd17](https://github.com/thevickypedia/PyS3Uploader/commit/7dacd17956351950fc45166970d9853ae25fff02) feat: Include failed files' information along with all filepaths in metadata upload
+- [4df7bcc](https://github.com/thevickypedia/PyS3Uploader/commit/4df7bcc14064bf21463812dbae074ad5c82117ed) perf: Bump connection and read timeouts for boto3 config
+- [c5620c8](https://github.com/thevickypedia/PyS3Uploader/commit/c5620c836bb4be923c034b8cae1a7ce2c68e6692) perf: Avoid re-calculating filesize for proceed check
+- [c3d9aa9](https://github.com/thevickypedia/PyS3Uploader/commit/c3d9aa94fce2bc08c0a9e6f0c3a592590aecc27e) perf: Handle broad exception case to avoid unexpected breakpoints
+- [0755a5c](https://github.com/thevickypedia/PyS3Uploader/commit/0755a5c55dea3ce463b835efc110bd49eecca858) chore: Update release notes for v0.4.1
+
 v0.4.1 (11/10/2025)
 -------------------
 - [9dd1d55](https://github.com/thevickypedia/PyS3Uploader/commit/9dd1d55e17c61f0d9c960b4f2649cc5b80cc54d5) chore: Release ``v0.4.1``
