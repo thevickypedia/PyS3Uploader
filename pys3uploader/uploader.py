@@ -2,6 +2,7 @@ import json
 import logging
 import os
 import time
+from collections.abc import Generator
 from concurrent.futures import ThreadPoolExecutor, as_completed
 from datetime import UTC, datetime
 from typing import Dict, Iterable, NoReturn
@@ -37,7 +38,8 @@ class Uploader:
     def __init__(
         self,
         bucket_name: str,
-        upload_dir: str,
+        upload_dir: str = None,
+        upload_files: Iterable[str] = None,
         s3_prefix: str = None,
         exclude_prefix: str = None,
         skip_dot_files: bool = True,
@@ -61,6 +63,7 @@ class Uploader:
         Args:
             bucket_name: Name of the bucket.
             upload_dir: Full path of the directory to be uploaded.
+            upload_files: Sequence of files to upload.
             s3_prefix: Particular bucket prefix within which the upload should happen.
             exclude_prefix: Full directory path to exclude from S3 object prefix.
             skip_dot_files: Boolean flag to skip dot files.
@@ -130,6 +133,7 @@ class Uploader:
 
         self.bucket_name = bucket_name
         self.upload_dir = upload_dir
+        self.upload_files = upload_files
         self.s3_prefix = s3_prefix
         self.exclude_prefix = exclude_prefix
         self.skip_dot_files = skip_dot_files
@@ -146,7 +150,7 @@ class Uploader:
         self.bucket_objects: boto3.resources.factory.s3.ObjectSummary = []
         self.object_size_map: Dict[str, int] = {}
 
-        self.upload_files: Dict[str, str] = {}
+        self.files_to_upload: Dict[str, str] = {}
         self.file_size_map: Dict[str, int] = {}
 
         self.metadata_filename = metadata_filename or getenv("METADATA_FILENAME", default="METADATA.json")
@@ -165,21 +169,30 @@ class Uploader:
             BucketNotFound: If bucket name was not found.
         """
         self.start = time.time()
-        if self.exclude_prefix and self.exclude_prefix not in self.upload_dir:
-            raise ValueError(
-                f"\n\n\tStart folder {self.exclude_prefix!r} is not a part of upload directory {self.upload_dir!r}"
-            )
-        if not self.upload_dir:
-            raise ValueError("\n\n\tCannot proceed without an upload directory.")
-        try:
-            assert os.path.exists(self.upload_dir)
-        except AssertionError:
-            raise ValueError(f"\n\n\tPath not found: {self.upload_dir}")
+        assertion = (self.upload_dir, self.upload_files)
+        assert any(assertion) and not all(
+            assertion
+        ), "\n\n\tInvalid input: exactly one of 'upload_dir' or 'upload_files' must be provided."
+        if self.upload_dir:
+            if self.exclude_prefix and self.exclude_prefix not in self.upload_dir:
+                raise ValueError(
+                    f"\n\n\tStart folder {self.exclude_prefix!r} is not a part of upload directory {self.upload_dir!r}"
+                )
+            try:
+                assert os.path.exists(self.upload_dir)
+            except AssertionError:
+                raise ValueError(f"\n\n\tPath not found: {self.upload_dir}")
+            self.upload_dir = os.path.abspath(self.upload_dir)
+        else:
+            assert all(
+                os.path.isfile(file) for file in self.files_to_upload
+            ), "\n\n\tAll items in 'upload_files' must be valid file paths."
+
         if not self.bucket_name:
             raise ValueError("\n\n\tCannot proceed without a bucket name.")
         if (buckets := [bucket.name for bucket in self.s3.buckets.all()]) and self.bucket_name not in buckets:
             raise BucketNotFound(f"\n\n\t{self.bucket_name} was not found.\n\tAvailable: {buckets}")
-        self.upload_dir = os.path.abspath(self.upload_dir)
+
         self.load_bucket_state()
 
     def load_bucket_state(self) -> None:
@@ -192,8 +205,8 @@ class Uploader:
 
     def load_local_state(self):
         """Loads the local file queue."""
-        self.upload_files = self._get_files()
-        self.file_size_map = {file: self.filesize(file) for file in self.upload_files}
+        self.files_to_upload = self._get_files()
+        self.file_size_map = {file: self.filesize(file) for file in self.files_to_upload}
 
     def exit(self) -> None:
         """Exits after printing results, and run time."""
@@ -228,7 +241,7 @@ class Uploader:
     def size_it(self) -> None:
         """Calculates and logs the total size of files in S3 and local."""
         files_in_s3 = len(self.object_size_map)
-        files_local = len(self.upload_files)
+        files_local = len(self.files_to_upload)
 
         total_size_s3 = sum(self.object_size_map.values())
         total_size_local = sum(self.file_size_map.values())
@@ -291,14 +304,13 @@ class Uploader:
         if self._proceed_to_upload(filepath, objectpath):
             self.bucket.upload_file(filepath, objectpath, Callback=callback)
 
-    def _get_files(self) -> Dict[str, str]:
-        """Get a mapping for all the file path and object paths in upload directory.
+    def _get_files_upload_dir(self) -> Generator[str]:
+        """Scans all sub-directories to prepare files to be uploaded to S3.
 
-        Returns:
-            Dict[str, str]:
-            Returns a key-value pair of filepath and objectpath.
+        Yields:
+            str:
+            Yields the absoluate path for each file to be uploaded.
         """
-        files_to_upload = {}
         for __path, __directory, __files in os.walk(self.upload_dir):
             scan_dir = os.path.split(__path)[-1]
             if scan_dir in self.folder_exclusion:
@@ -311,22 +323,32 @@ class Uploader:
                 if self.skip_dot_files and file_.startswith("."):
                     self.logger.info("Skipping dot file: %s", file_)
                     continue
-                file_path = os.path.join(__path, file_)
-                if self.exclude_prefix:
-                    relative_path = file_path.replace(self.exclude_prefix, "")
-                else:
-                    relative_path = file_path
-                # Lists in python are ordered, so s3 prefix will get loaded first when provided
-                url_parts = []
-                if self.s3_prefix:
-                    url_parts.extend(
-                        self.s3_prefix.split(os.sep) if os.sep in self.s3_prefix else self.s3_prefix.split("/")
-                    )
-                # Add rest of the file path to parts before normalizing as an S3 object URL
-                url_parts.extend(relative_path.split(os.sep))
-                # Remove falsy values using filter - "None", "bool", "len" or "lambda item: item"
-                object_path = urljoin(*filter(None, url_parts))
-                files_to_upload[file_path] = object_path
+                yield os.path.join(__path, file_)
+
+    def _get_files(self) -> Dict[str, str]:
+        """Get a mapping for all the file path and object paths in upload directory.
+
+        Returns:
+            Dict[str, str]:
+            Returns a key-value pair of filepath and objectpath.
+        """
+        files_to_upload = {}
+        for file_path in self.upload_files or self._get_files_upload_dir():
+            if self.exclude_prefix:
+                relative_path = file_path.replace(self.exclude_prefix, "")
+            else:
+                relative_path = file_path
+            # Lists in python are ordered, so s3 prefix will get loaded first when provided
+            url_parts = []
+            if self.s3_prefix:
+                url_parts.extend(
+                    self.s3_prefix.split(os.sep) if os.sep in self.s3_prefix else self.s3_prefix.split("/")
+                )
+            # Add rest of the file path to parts before normalizing as an S3 object URL
+            url_parts.extend(relative_path.split(os.sep))
+            # Remove falsy values using filter - "None", "bool", "len" or "lambda item: item"
+            object_path = urljoin(*filter(None, url_parts))
+            files_to_upload[file_path] = object_path
         return files_to_upload
 
     def _preflight(self) -> int:
@@ -341,26 +363,33 @@ class Uploader:
         # Verify and initiate local state
         self.load_local_state()
         # Make sure there are files to upload
-        assert self.upload_files, "\n\n\tNo files found to upload.\n"
+        assert self.files_to_upload, "\n\n\tNo files found to upload.\n"
         # Log size details
         self.size_it()
         # Start metadata upload timer
         self.timer.start()
         # Return total files to upload
-        return len(self.upload_files)
+        return len(self.files_to_upload)
 
     def run(self) -> None:
         """Initiates object upload in a traditional loop."""
         total_files = self._preflight()
 
-        self.logger.info(
-            "%d files from '%s' will be uploaded to '%s' sequentially",
-            total_files,
-            self.upload_dir,
-            self.bucket_name,
-        )
+        if self.upload_dir:
+            self.logger.info(
+                "%d files from '%s' will be uploaded to '%s' sequentially",
+                total_files,
+                self.upload_dir,
+                self.bucket_name,
+            )
+        else:
+            self.logger.info(
+                "%d files will be uploaded to '%s' sequentially",
+                total_files,
+                self.bucket_name,
+            )
         with alive_bar(total_files, **self.alive_bar_kwargs) as overall_bar:
-            for filepath, objectpath in self.upload_files.items():
+            for filepath, objectpath in self.files_to_upload.items():
                 progress_callback = ProgressPercentage(
                     filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                 )
@@ -384,17 +413,25 @@ class Uploader:
         """
         total_files = self._preflight()
 
-        self.logger.info(
-            "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
-            total_files,
-            self.upload_dir,
-            self.bucket_name,
-            max_workers,
-        )
+        if self.upload_dir:
+            self.logger.info(
+                "%d files from '%s' will be uploaded to '%s' with maximum concurrency of: %d",
+                total_files,
+                self.upload_dir,
+                self.bucket_name,
+                max_workers,
+            )
+        else:
+            self.logger.info(
+                "%d files will be uploaded to '%s' with maximum concurrency of: %d",
+                total_files,
+                self.bucket_name,
+                max_workers,
+            )
         with alive_bar(total_files, **self.alive_bar_kwargs) as overall_bar:
             with ThreadPoolExecutor(max_workers=max_workers) as executor:
                 futures = {}
-                for filepath, objectpath in self.upload_files.items():
+                for filepath, objectpath in self.files_to_upload.items():
                     progress_callback = ProgressPercentage(
                         filename=os.path.basename(filepath), size=self.filesize(filepath), bar=overall_bar
                     )
@@ -419,16 +456,17 @@ class Uploader:
         """Metadata uploader."""
         self.load_bucket_state()
         success = {
-            filepath: self.upload_files[filepath] for filepath in list(set(self.results.success + self.results.skipped))
+            filepath: self.files_to_upload[filepath]
+            for filepath in list(set(self.results.success + self.results.skipped))
         }
         objects_uploaded = len(success)
         size_uploaded = sum(self.filesize(file) for file in success)
 
-        pending_files = set(self.upload_files.keys()) - set(success) - set(self.results.failed)
+        pending_files = set(self.files_to_upload.keys()) - set(success) - set(self.results.failed)
         objects_pending = len(pending_files)
         size_pending = sum(self.filesize(file) for file in pending_files)
 
-        failed = {filepath: self.upload_files[filepath] for filepath in self.results.failed}
+        failed = {filepath: self.files_to_upload[filepath] for filepath in self.results.failed}
         objects_failed = len(failed)
         size_failed = sum(self.filesize(file) for file in self.results.failed)
 
