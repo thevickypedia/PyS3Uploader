@@ -1,7 +1,9 @@
+import logging
 import math
 import os
 from typing import Dict, List, Set
 
+import dotenv
 from botocore.config import Config
 
 RETRY_CONFIG: Config = Config(
@@ -25,6 +27,32 @@ class UploadResults(dict):
     success: List[str] = []
     failed: List[str] = []
     skipped: List[str] = []
+
+
+def load_env(env_file: str, logger: logging.Logger) -> None:
+    """Load environment variables.
+
+    Args:
+        env_file: Dotenv filepath.
+        logger: Logger object.
+    """
+    # Check for env_file in current working directory
+    if os.path.isfile(env_file):
+        logger.debug("Loading env file: %s", env_file)
+        dotenv.load_dotenv(dotenv_path=env_file, override=True)
+    # Find the env_file from root
+    elif env_file := dotenv.find_dotenv(env_file, raise_error_if_not_found=False):
+        logger.debug("Loading env file: %s", env_file)
+        dotenv.load_dotenv(dotenv_path=env_file, override=True)
+    else:
+        # Scan current working directory for any .env files
+        for file in os.listdir():
+            if file.endswith(".env"):
+                logger.debug("Loading env file: %s", file)
+                dotenv.load_dotenv(dotenv_path=file, override=True)
+                break
+        else:
+            logger.debug("No .env files found to load")
 
 
 def getenv(*args, default: str = None) -> str:

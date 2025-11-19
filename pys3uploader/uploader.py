@@ -8,7 +8,6 @@ from datetime import UTC, datetime
 from typing import Dict, Iterable, NoReturn
 
 import boto3.resources.factory
-import dotenv
 from alive_progress import alive_bar
 from botocore.config import Config
 
@@ -23,6 +22,7 @@ from pys3uploader.utils import (
     convert_seconds,
     convert_to_folder_structure,
     getenv,
+    load_env,
     size_converter,
     urljoin,
 )
@@ -103,25 +103,7 @@ class Uploader:
                 If no filepath is provided, PyS3Uploader searches the current directory for a .env file.
         """
         self.logger = logger or setup_logger(handler=LogHandler(log_handler), level=LogLevel(log_level))
-        self.env_file = env_file or getenv("ENV_FILE", default=".env")
-
-        # Check for env_file in current working directory
-        if os.path.isfile(self.env_file):
-            self.logger.debug("Loading env file: %s", self.env_file)
-            dotenv.load_dotenv(dotenv_path=self.env_file, override=True)
-        # Find the env_file from root
-        elif env_file := dotenv.find_dotenv(self.env_file, raise_error_if_not_found=False):
-            self.logger.debug("Loading env file: %s", env_file)
-            dotenv.load_dotenv(dotenv_path=env_file, override=True)
-        else:
-            # Scan current working directory for any .env files
-            for file in os.listdir():
-                if file.endswith(".env"):
-                    self.logger.debug("Loading env file: %s", file)
-                    dotenv.load_dotenv(dotenv_path=file, override=True)
-                    break
-            else:
-                self.logger.debug("No .env files found to load")
+        load_env(env_file or getenv("ENV_FILE", default=".env"), self.logger)
 
         self.session = boto3.Session(
             profile_name=profile_name or getenv("PROFILE_NAME", "AWS_PROFILE_NAME"),
